@@ -1,0 +1,144 @@
+* {margin: 0;}
+header{
+
+  background-color: #0754a5;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  min-height: 120px;
+}
+header h1 {
+  color: white;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+.search-section {
+  background-color: white;
+  padding: 5px 2px;
+  text-align: center;
+}
+.search-bar {
+display: block;
+
+}
+.search-bar input {
+  width: 70%;
+  border: 2px solid #0875e1;
+  border-radius: 50px 0 0 50px;
+  flex: 1;
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 1rem;
+  padding: 14px 16px;
+}
+.search-bar button {
+  width: 20%;
+  background-color: #0875e1;
+  border: 2px solid #0875e1;
+  border-radius: 0 50px 50px 0;
+  color: white;
+  cursor: pointer;
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 700;
+  padding: 14px 24px;
+}
+
+.hero-image-section {
+  padding: none;
+  text-align: center;
+}
+.hero-image {
+  display: block;
+  height: auto;
+  margin: 0 ;
+  max-width: 100%;
+  width: 100%;
+}
+/* EXPLORE MY PORTFOLIO-CATEGORIES */
+.portfolio-categories {
+  margin: 32px auto;
+  max-width: 900px;
+  padding: 0 20px;
+}
+
+.portfolio-categories > h2 {
+  color: #0754a5;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 85%;
+}
+
+.category-row {
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  padding-bottom: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #222;
+  display: flex;
+  min-height: 170px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.category-row:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transform: translateY(-3px);
+}
+
+.category-row:focus {
+  outline: 3px solid #0875e1;
+  outline-offset: 3px;
+}
+
+.category-row img {
+  height: 170px;
+  object-fit: cover;
+  width: 250px;
+}
+
+.category-text {
+  padding: 24px;
+}
+
+.category-text h3 {
+  color: #0754a5;
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+}
+
+.category-text p {
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.category-text span {
+  color: #0875e1;
+  font-weight: 700;
+}
+
+@media (max-width: 767px) {
+    body {
+
+    }
+}
+
+
+
+
+@media (min-width: 768px) and (max-width: 1023px) { 
+
+}
+
+
+@media (min-width: 1024px) {
+}
