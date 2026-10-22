@@ -18,3 +18,7 @@ Le site prêt à déployer est dans `dist/`.
 - `src/components/` : AnnouncementBar, Header, Nav, SearchBar, Hero, Categories, CategoryCard
 - `src/App.jsx` : assemble la page + état de la recherche
 - `src/index.css` : ton ancien style.css
+
+## Déploiement
+Chaque push sur `main` lance `.github/workflows/deploy.yml`, qui build le site et le publie sur GitHub Pages.
+(Une seule fois : Settings → Pages → Source : « GitHub Actions ».)
