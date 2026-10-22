@@ -69,7 +69,7 @@ export const projects = [
     description:
       'A job board with a cosy pixel-art Solarpunk look. I built the React front end; the Flask API was made by a teammate. The demo runs on mock data.',
     tags: ['React', 'Vite', 'Flask API', 'Pixel art'],
-    context: 'Epitech · T-WEB-501', // petit texte gris à côté du statut ('' = masqué)
+    context: 'Epitech · · ·', // petit texte gris à côté du statut ('' = masqué)
     // Pastilles "coloris" comme sur Decathlon : la palette Solarpunk du projet
     swatches: ['#3E6B48', '#C9704A', '#F4CC6A', '#8B4A2B', '#FBF3E4'],
     href: CozyDesk,          // lien du bouton (null = bouton grisé)
