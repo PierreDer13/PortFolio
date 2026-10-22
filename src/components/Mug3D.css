@@ -1,3 +1,8 @@
+/* =============================================================
+   Mug3D.css — Animation 3D de la tasse + vapeur
+   ============================================================= */
+
+/* Conteneur : vapeur, tasse et ombre empilées verticalement */
 .mug3d {
   display: flex;
   flex-direction: column;
@@ -5,23 +10,30 @@
   width: 100%;
 }
 
+/* La scène : `perspective` = distance de l'œil.
+   Plus la valeur est petite, plus l'effet 3D est fort. */
 .mug3d-scene {
   perspective: 700px;
   width: 200px;
-  height: 125px;
+  height: 125px; /* 200 x 125 = le ratio 16:10 du dessin */
 }
 
+/* L'objet qui tourne.
+   transform-style: preserve-3d = INDISPENSABLE : sans ça, les 14
+   couches seraient "aplaties" et on ne verrait aucune profondeur. */
 .mug3d-object {
   position: relative;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  /* 6 s par aller, `alternate` = fait l'aller puis le retour en boucle */
   animation: mug-turn 6s ease-in-out infinite alternate;
 }
 
+/* Toutes les couches au même endroit (puis décalées en Z par le JSX) */
 .mug3d-layer {
   position: absolute;
-  inset: 0;
+  inset: 0; /* = top/right/bottom/left à 0 : remplit le parent */
 }
 
 .mug3d-layer svg {
@@ -30,12 +42,14 @@
   height: 100%;
 }
 
+/* Pivot de gauche à droite (rotateY) avec la tasse un peu vue
+   d'en haut (rotateX négatif) */
 @keyframes mug-turn {
   from { transform: rotateX(-12deg) rotateY(-38deg); }
   to   { transform: rotateX(-12deg) rotateY(38deg); }
 }
 
-/* Vapeur en pixels, comme dans CozyDesk */
+/* ---- Vapeur en pixels (comme dans CozyDesk) ---- */
 .mug3d-steam {
   display: flex;
   gap: 12px;
@@ -50,15 +64,18 @@
   animation: mug-steam 1.6s ease-out infinite;
 }
 
+/* Départs décalés → les 3 carrés ne montent pas en même temps */
 .mug3d-steam span:nth-child(2) { animation-delay: 0.5s; }
 .mug3d-steam span:nth-child(3) { animation-delay: 1s; }
 
+/* Monte de 24px en apparaissant puis en s'effaçant */
 @keyframes mug-steam {
   0%   { transform: translateY(10px);  opacity: 0; }
   30%  { opacity: 1; }
   100% { transform: translateY(-14px); opacity: 0; }
 }
 
+/* Ombre : ovale (border-radius 50%) semi-transparent et flouté */
 .mug3d-shadow {
   width: 150px;
   height: 14px;
@@ -68,12 +85,14 @@
   filter: blur(3px);
 }
 
-/* Survol de la fiche : la tasse s'arrête */
+/* Au survol de la fiche, on met l'animation en pause */
 .project-card:hover .mug3d-object,
 .project-card:hover .mug3d-steam span {
   animation-play-state: paused;
 }
 
+/* Accessibilité : si l'utilisateur a demandé moins d'animations
+   dans son système, la tasse reste fixe, légèrement de biais */
 @media (prefers-reduced-motion: reduce) {
   .mug3d-object { animation: none; transform: rotateX(-12deg) rotateY(-25deg); }
   .mug3d-steam span { animation: none; opacity: 0.6; }

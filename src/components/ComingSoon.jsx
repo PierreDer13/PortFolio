@@ -1,13 +1,20 @@
+// =============================================================
+// components/ComingSoon.jsx — Visuel provisoire pour un projet
+// sans aperçu : une manette en pixel art + "Preview coming soon"
+// =============================================================
+
+// Même technique que la tasse : 1 caractère = 1 pixel
 const PAD = [
   '..dddddddddddd..',
   '.dddddddddddddd.',
-  'ddwddddddddrdddd',
+  'ddwddddddddrdddd', // w = croix directionnelle (jaune), r = boutons (bleu)
   'dwwwddddddrdrddd',
   'ddwdddddddddrddd',
   'dddddddddddddddd',
-  '.dddd......dddd.',
+  '.dddd......dddd.', // les deux poignées
   '..dd........dd..',
 ]
+// Couleurs : gris foncé + le jaune et le bleu du portfolio
 const C = { d: '#3c3c3c', w: '#FFCD4E', r: '#0875e1' }
 
 export default function ComingSoon() {

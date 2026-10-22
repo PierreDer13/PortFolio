@@ -1,10 +1,15 @@
-/* ===== PAGE PROJECTS — inspirée des pages rayon / fiches article Decathlon ===== */
+/* =============================================================
+   pages/Projects.css — Page Projects façon rayon Decathlon
+   ============================================================= */
+
+/* Conteneur de la page : largeur max + centré (margin auto) */
 .projects-page {
   max-width: 1100px;
   margin: 0 auto;
   padding: 16px 20px 48px;
 }
 
+/* ---- Fil d'Ariane : Home › Projects ---- */
 .breadcrumb {
   display: flex;
   gap: 8px;
@@ -18,6 +23,7 @@
 }
 .breadcrumb a:hover { text-decoration: underline; }
 
+/* ---- Titre + compteur sur la même ligne, alignés sur la ligne de base du texte ---- */
 .projects-head {
   display: flex;
   align-items: baseline;
@@ -32,6 +38,7 @@
 }
 .projects-count { color: #616161; }
 
+/* ---- Boutons de filtre en forme de pilule, avec un trait de séparation dessous ---- */
 .projects-filters {
   display: flex;
   gap: 8px;
@@ -52,19 +59,25 @@
   cursor: pointer;
 }
 .projects-filters button:hover { border-color: #0875e1; }
+/* Filtre sélectionné : fond bleu (classe ajoutée par Projects.jsx) */
 .projects-filters button.is-active {
   background: #0754a5;
   border-color: #0754a5;
   color: white;
 }
 
+/* ---- Grille responsive SANS media query :
+   autant de colonnes de 300px minimum que la largeur permet
+   (3 sur grand écran, 1 sur téléphone) ---- */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
 }
 
-/* ----- Fiche article ----- */
+/* ----- Fiche article -----
+   flex + column : le contenu s'empile ; ça permet de pousser le
+   statut et le bouton tout en bas (voir margin-top: auto plus bas) */
 .project-card {
   display: flex;
   flex-direction: column;
@@ -74,6 +87,8 @@
 }
 .project-card:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); }
 
+/* Zone visuelle : format 4/3 fixe, contenu centré.
+   position: relative → le badge (absolute) se place par rapport à elle */
 .project-media {
   position: relative;
   aspect-ratio: 4 / 3;
@@ -85,6 +100,7 @@
 }
 .project-media.is-cozy { background: #FBF3E4; } /* crème de CozyDesk */
 
+/* Badge collé en haut à gauche du visuel */
 .project-badge {
   position: absolute;
   top: 12px;
@@ -99,6 +115,7 @@
 .project-badge.is-live { background: #FFCD4E; color: #111; }
 .project-badge.is-wip  { background: #3c3c3c; color: white; }
 
+/* Partie texte : flex: 1 = prend toute la hauteur restante de la fiche */
 .project-body {
   display: flex;
   flex-direction: column;
@@ -107,6 +124,7 @@
   flex: 1;
 }
 
+/* Pastilles de couleur rondes ("coloris") */
 .project-swatches {
   display: flex;
   gap: 6px;
@@ -120,6 +138,7 @@
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
+/* "Marque" en petites majuscules grasses, comme sur Decathlon */
 .project-brand {
   font-size: 0.8rem;
   font-weight: 800;
@@ -141,6 +160,7 @@
   color: #444;
 }
 
+/* Tags de techno */
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -156,6 +176,10 @@
   color: #0754a5;
 }
 
+/* Ligne statut, à la place du prix.
+   margin-top: auto = pousse cette ligne (et le bouton) tout en bas :
+   les boutons des deux fiches restent alignés même si les textes
+   n'ont pas la même longueur */
 .project-status-row {
   display: flex;
   justify-content: space-between;
@@ -171,6 +195,7 @@
   font-size: 1.15rem;
   font-weight: 800;
 }
+/* ::before = élément "fantôme" créé en CSS : ici la pastille ronde du statut */
 .project-status::before {
   content: '';
   width: 10px;
@@ -184,6 +209,7 @@
   color: #616161;
 }
 
+/* Bouton principal bleu arrondi, pleine largeur */
 .project-cta {
   display: block;
   text-align: center;
@@ -196,6 +222,7 @@
   text-decoration: none;
 }
 .project-cta:hover { background: #0754a5; }
+/* Bouton désactivé (projet sans lien) */
 .project-cta.is-disabled {
   background: #e5e5e5;
   color: #616161;

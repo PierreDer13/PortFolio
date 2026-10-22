@@ -237,15 +237,18 @@ header h1 a {
   text-decoration: none;
 }
 
-/* Lien actif dans la nav */
+/* Lien actif dans la nav : cible l'attribut aria-current posé par Nav.jsx */
 .main-nav a[aria-current="page"] {
   border-bottom-color: #0754a5;
 }
 
-/* Mobile : la barre de recherche et la nav ne débordent plus */
+/* Mobile : la barre de recherche et la nav ne débordent plus.
+   min-width: 0 → sans ça, un <input> dans un flex refuse de
+   rétrécir sous sa largeur par défaut et pousse le bouton hors écran */
 .search-bar input { min-width: 0; }
 
 @media (max-width: 767px) {
+  /* flex-wrap : les liens passent à la ligne s'il n'y a pas la place */
   .main-nav ul { gap: 0; flex-wrap: wrap; }
   .main-nav a { padding: 12px 12px; }
 }

@@ -1,21 +1,36 @@
+// =============================================================
+// components/ProjectCard.jsx — Une fiche projet façon "article"
+// Decathlon : visuel + badge, coloris, marque, titre, tags,
+// statut (à la place du prix) et bouton.
+// =============================================================
 import Mug3D from './Mug3D'
 import ComingSoon from './ComingSoon'
 
 export default function ProjectCard({ project }) {
+  // "Destructuring" : on sort chaque champ de l'objet dans sa propre variable
+  // (évite d'écrire project.title, project.tags, etc. partout)
   const { status, badge, brand, title, tagline, description, tags, context, swatches, href, cta, preview } = project
   const isLive = status === 'live'
 
   return (
+    // <article> : balise sémantique pour un contenu autonome (une fiche)
     <article className="project-card">
+      {/* ---- Visuel ---- */}
+      {/* Template string pour ajouter la classe 'is-cozy' (fond crème) seulement pour CozyDesk */}
       <div className={`project-media ${preview === 'mug' ? 'is-cozy' : ''}`}>
+        {/* Badge jaune (en ligne) ou gris foncé (en cours) */}
         <span className={`project-badge ${isLive ? 'is-live' : 'is-wip'}`}>{badge}</span>
+        {/* Choix du visuel selon le champ `preview` de data.js */}
         {preview === 'mug' ? <Mug3D /> : <ComingSoon />}
       </div>
 
+      {/* ---- Texte ---- */}
       <div className="project-body">
+        {/* condition && <élément> : n'affiche l'élément que si la condition est vraie */}
         {swatches.length > 0 && (
           <ul className="project-swatches" aria-label="Project color palette">
             {swatches.map((c) => (
+              // style={{ ... }} : CSS en ligne, ici la couleur de chaque pastille
               <li key={c} style={{ background: c }} title={c}></li>
             ))}
           </ul>
@@ -32,6 +47,7 @@ export default function ProjectCard({ project }) {
           ))}
         </ul>
 
+        {/* Statut avec pastille verte/orange (dessinée en CSS avec ::before) */}
         <div className="project-status-row">
           <span className={`project-status ${isLive ? 'is-live' : 'is-wip'}`}>
             {isLive ? 'Online' : 'In progress'}
@@ -39,7 +55,9 @@ export default function ProjectCard({ project }) {
           {context && <span className="project-context">{context}</span>}
         </div>
 
+        {/* Bouton : vrai lien s'il y a une URL, sinon bouton grisé non cliquable */}
         {href ? (
+          // target="_blank" : nouvel onglet ; rel="noreferrer" : sécurité
           <a className="project-cta" href={href} target="_blank" rel="noreferrer">
             {cta} →
           </a>
