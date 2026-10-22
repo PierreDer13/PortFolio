@@ -254,3 +254,11 @@
   font-size: 0.8rem;
   letter-spacing: 1px;
 }
+
+/* Photo des cartes de l'accueil : remplit tout le cadre 4/3
+   sans être déformée (object-fit: cover recadre l'image) */
+.project-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

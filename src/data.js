@@ -31,6 +31,8 @@ export const navLinks = [
 export const categories = [
   {
     title: 'My projects',
+    brand: 'React · Java',       // ligne en majuscules au-dessus du titre
+    badge: '2 projects',         // étiquette en haut à gauche de la photo
     text: 'Discover the digital projects I have created or still working on!',
     cta: 'View my projects →',
     href: PROJECTS_URL, // → ouvre la page Projects
@@ -39,6 +41,8 @@ export const categories = [
   },
   {
     title: 'Digital Resume',
+    brand: 'Education · Skills',
+    badge: 'Online',
     text: 'Learn more about my education, experience, skills, and career goals.',
     cta: 'View my resume →',
     href: RESUME_URL,
@@ -47,6 +51,8 @@ export const categories = [
   },
   {
     title: 'About Me',
+    brand: 'Pierre DER GAZERIAN',
+    badge: 'Open to work',
     text: 'Get to know me, my interests, and my approach to digital development.',
     cta: 'Learn more about me →',
     href: 'about-me.html',
