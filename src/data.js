@@ -74,6 +74,8 @@ export const projects = [
     swatches: ['#3E6B48', '#C9704A', '#F4CC6A', '#8B4A2B', '#FBF3E4'],
     href: CozyDesk,          // lien du bouton (null = bouton grisé)
     cta: 'View the demo',    // texte du bouton
+    repo: 'https://github.com/PierreDer13/cozydesk', // lien GitHub (2e bouton) ; absent = pas de 2e bouton    
+    repoCta: 'View the code on GitHub',
     preview: 'mug',          // visuel : 'mug' = tasse 3D | 'soon' = "coming soon"
   },
   {

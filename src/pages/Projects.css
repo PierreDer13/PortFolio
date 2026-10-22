@@ -229,6 +229,16 @@
   cursor: not-allowed;
 }
 
+/* 2e bouton : blanc avec contour bleu, comme les boutons secondaires Decathlon */
+.project-cta.is-secondary {
+  background: white;
+  color: #0754a5;
+  border: 2px solid #0754a5;
+}
+.project-cta.is-secondary:hover {
+  background: #eef4fb;
+}
+
 /* ----- Visuel "Preview coming soon" ----- */
 .coming-soon {
   display: flex;

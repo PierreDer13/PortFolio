@@ -9,9 +9,9 @@ import ComingSoon from './ComingSoon'
 export default function ProjectCard({ project }) {
   // "Destructuring" : on sort chaque champ de l'objet dans sa propre variable
   // (évite d'écrire project.title, project.tags, etc. partout)
-  const { status, badge, brand, title, tagline, description, tags, context, swatches, href, cta, preview } = project
+  const { status, badge, brand, title, tagline, description, tags, context, swatches, href, cta, preview, repo, repoCta } = project
   const isLive = status === 'live'
-
+  
   return (
     // <article> : balise sémantique pour un contenu autonome (une fiche)
     <article className="project-card">
@@ -66,6 +66,14 @@ export default function ProjectCard({ project }) {
             {cta}
           </span>
         )}
+     
+        {/* 2e bouton (contour bleu) : seulement si le projet a un lien `repo` dans data.js */}
+        {repo && (
+          <a className="project-cta is-secondary" href={repo} target="_blank" rel="noreferrer">
+            {repoCta}
+          </a>
+        )}
+
       </div>
     </article>
   )
