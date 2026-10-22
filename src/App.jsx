@@ -1,29 +1,41 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AnnouncementBar from './components/AnnouncementBar'
 import Header from './components/Header'
 import Nav from './components/Nav'
 import SearchBar from './components/SearchBar'
-import Hero from './components/Hero'
-import Categories from './components/Categories'
-import { categories } from './data'
+import Home from './pages/Home'
+import Projects from './pages/Projects'
+
+// Routing minimal par hash (#/projects) : pas de dépendance,
+// et ça marche sur GitHub Pages sans config serveur.
+function useHashRoute() {
+  const read = () => window.location.hash.replace(/^#/, '') || '/'
+  const [route, setRoute] = useState(read)
+  useEffect(() => {
+    const onChange = () => {
+      setRoute(read())
+      window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', onChange)
+    return () => window.removeEventListener('hashchange', onChange)
+  }, [])
+  return route
+}
 
 export default function App() {
+  const route = useHashRoute()
   const [query, setQuery] = useState('')
 
-  // La barre de recherche filtre les cartes en direct (titre + texte)
-  const q = query.trim().toLowerCase()
-  const filtered = categories.filter((c) =>
-    (c.title + ' ' + c.text).toLowerCase().includes(q)
-  )
+  // On vide la recherche quand on change de page
+  useEffect(() => setQuery(''), [route])
 
   return (
     <>
       <AnnouncementBar />
       <Header />
-      <Nav />
+      <Nav route={route} />
       <SearchBar query={query} onQueryChange={setQuery} />
-      <Hero />
-      <Categories items={filtered} />
+      {route === '/projects' ? <Projects query={query} /> : <Home query={query} />}
     </>
   )
 }

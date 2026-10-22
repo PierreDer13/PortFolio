@@ -1,0 +1,219 @@
+/* ===== PAGE PROJECTS — inspirée des pages rayon / fiches article Decathlon ===== */
+.projects-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 20px 48px;
+}
+
+.breadcrumb {
+  display: flex;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #616161;
+  margin: 8px 0 16px;
+}
+.breadcrumb a {
+  color: #0754a5;
+  text-decoration: none;
+}
+.breadcrumb a:hover { text-decoration: underline; }
+
+.projects-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.projects-head h1 {
+  color: #0754a5;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.projects-count { color: #616161; }
+
+.projects-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 18px 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.projects-filters button {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 50px;
+  border: 1px solid #c7c7c7;
+  background: white;
+  color: #222;
+  cursor: pointer;
+}
+.projects-filters button:hover { border-color: #0875e1; }
+.projects-filters button.is-active {
+  background: #0754a5;
+  border-color: #0754a5;
+  color: white;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* ----- Fiche article ----- */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid #ececec;
+  transition: box-shadow 0.2s ease;
+}
+.project-card:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12); }
+
+.project-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f4f5;           /* gris clair des visuels produit Decathlon */
+  overflow: hidden;
+}
+.project-media.is-cozy { background: #FBF3E4; } /* crème de CozyDesk */
+
+.project-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.project-badge.is-live { background: #FFCD4E; color: #111; }
+.project-badge.is-wip  { background: #3c3c3c; color: white; }
+
+.project-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  flex: 1;
+}
+
+.project-swatches {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+}
+.project-swatches li {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.project-brand {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #222;
+}
+.project-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111;
+}
+.project-tagline {
+  font-style: italic;
+  color: #0754a5;
+}
+.project-desc {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+}
+.project-tags li {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: #eef4fb;
+  color: #0754a5;
+}
+
+.project-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+.project-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.project-status::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.project-status.is-live::before { background: #2e9e4f; }
+.project-status.is-wip::before  { background: #f0a020; }
+.project-context {
+  font-size: 0.8rem;
+  color: #616161;
+}
+
+.project-cta {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  padding: 12px 16px;
+  border-radius: 50px;
+  background: #0875e1;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+}
+.project-cta:hover { background: #0754a5; }
+.project-cta.is-disabled {
+  background: #e5e5e5;
+  color: #616161;
+  cursor: not-allowed;
+}
+
+/* ----- Visuel "Preview coming soon" ----- */
+.coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.coming-soon svg { width: 180px; height: auto; }
+.coming-soon p {
+  font-weight: 700;
+  color: #616161;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
