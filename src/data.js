@@ -16,13 +16,14 @@ export const RESUME_URL = 'https://pierreder13.github.io/My_Resume/'
 export const CozyDesk = 'https://cozydesk-demo.vercel.app/'
 // Lien interne vers la page Projects (lu par useHashRoute dans App.jsx)
 export const PROJECTS_URL = '#/projects'
+export const ABOUT_URL = '#/about'
 
 // ---------- Barre de navigation ----------
 // Nav.jsx fait un .map() sur ce tableau : 1 objet = 1 lien
 export const navLinks = [
   { label: 'Projects', href: PROJECTS_URL },
   { label: 'Resume', href: RESUME_URL },
-  { label: 'About', href: 'about-me.html' }, // page pas encore créée
+  { label: 'About', href: ABOUT_URL },
   // Template string `...${}` : insère la variable dans le texte
   { label: 'Contact', href: `mailto:${CONTACT_EMAIL}` },
 ]
@@ -55,7 +56,7 @@ export const categories = [
     badge: 'Open to work',
     text: 'Get to know me, my interests, and my approach to digital development.',
     cta: 'Learn more about me →',
-    href: 'about-me.html',
+    href: ABOUT_URL,           // → ouvre la page About
     img: aboutImg,
     alt: 'Portrait or presentation of Pierre',
   },

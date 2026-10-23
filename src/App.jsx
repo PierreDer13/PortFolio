@@ -15,6 +15,7 @@ import SearchBar from './components/SearchBar'
 // Les deux pages du site
 import Home from './pages/Home'
 import Projects from './pages/Projects'
+import About from './pages/About'
 
 // -------------------------------------------------------------
 // Hook perso : lit la "route" dans l'URL après le #
@@ -67,8 +68,14 @@ export default function App() {
       {/* SearchBar affiche `query` et nous renvoie chaque frappe via setQuery */}
       <SearchBar query={query} onQueryChange={setQuery} />
 
-      {/* Choix de la page : condition ? siVrai : siFaux */}
-      {route === '/projects' ? <Projects query={query} /> : <Home query={query} />}
+      {/* Choix de la page selon la route */}
+      {route === '/projects' ? (
+        <Projects query={query} />
+      ) : route === '/about' ? (
+        <About />
+      ) : (
+        <Home query={query} />
+      )}
     </>
   )
 }

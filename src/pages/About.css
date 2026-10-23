@@ -1,0 +1,171 @@
+/* =============================================================
+   pages/About.css — Page About façon fiche produit Decathlon
+   (réutilise .projects-page, .breadcrumb, .project-cta... de Projects.css)
+   ============================================================= */
+
+/* ---- Haut de la fiche : galerie | infos ----
+   2 colonnes sur grand écran, 1 seule sur mobile (media query en bas) */
+.about-product {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ---- Galerie ---- */
+.about-main-photo {
+  position: relative; /* pour placer le badge par-dessus */
+  aspect-ratio: 4 / 3;
+  background: #f5f4f5;
+  overflow: hidden;
+}
+.about-main-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Miniatures sur une ligne de 4 */
+.about-thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.about-thumbs button {
+  padding: 0;
+  border: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.about-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Miniature sélectionnée : contour bleu */
+.about-thumbs button.is-active { border-color: #0754a5; }
+
+/* ---- Infos (colonne droite) ---- */
+.about-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.about-name {
+  color: #111;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.about-pitch {
+  line-height: 1.5;
+  color: #333;
+}
+.about-status { font-size: 1.3rem; }
+
+/* Choix du domaine : boutons rectangulaires comme les tailles Decathlon */
+.about-label { font-size: 0.9rem; color: #444; }
+.about-domain-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.about-domain-buttons button {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  border: 1px solid #c7c7c7;
+  background: white;
+  cursor: pointer;
+}
+.about-domain-buttons button:hover { border-color: #0754a5; }
+.about-domain-buttons button.is-active {
+  border: 2px solid #0754a5;
+  color: #0754a5;
+}
+
+/* Caractéristiques : petite liste avec un fond gris clair */
+.about-specs {
+  list-style: none;
+  padding: 12px 16px;
+  margin: 0;
+  background: #f5f4f5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.92rem;
+}
+
+/* ---- Onglets dépliables ---- */
+.about-tabs {
+  margin-top: 40px;
+  border-top: 1px solid #e5e5e5;
+}
+.about-tabs details {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 4px;
+}
+/* Titre cliquable de chaque onglet */
+.about-tabs summary {
+  cursor: pointer;
+  list-style: none; /* enlève le triangle par défaut */
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0754a5;
+}
+.about-tabs summary::-webkit-details-marker { display: none; } /* Safari */
+/* Le "+" devient "−" quand l'onglet est ouvert */
+.about-tabs summary::after { content: '+'; font-size: 1.4rem; line-height: 1; }
+.about-tabs details[open] summary::after { content: '−'; }
+
+.about-tabs details > p,
+.about-tabs details > div,
+.about-tabs details > ol {
+  margin-bottom: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.about-skill-group h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #222;
+  margin-bottom: 6px;
+}
+/* Compétence mise en avant pour le domaine choisi : badge jaune */
+.project-tags li.is-highlight {
+  background: #FFCD4E;
+  color: #111;
+}
+.about-note { font-size: 0.85rem; color: #616161; }
+
+/* Parcours : date à gauche, intitulé à droite */
+.about-timeline {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.about-timeline li {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+}
+.about-when { color: #616161; font-weight: 600; }
+
+/* ---- Mobile : tout sur une colonne ---- */
+@media (max-width: 767px) {
+  .about-product { grid-template-columns: 1fr; }
+  .about-timeline li { grid-template-columns: 1fr; gap: 0; }
+}
