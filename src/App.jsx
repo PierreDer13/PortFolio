@@ -16,6 +16,7 @@ import SearchBar from './components/SearchBar'
 import Home from './pages/Home'
 import Projects from './pages/Projects'
 import About from './pages/About'
+import Contact from './pages/Contact'
 
 // -------------------------------------------------------------
 // Hook perso : lit la "route" dans l'URL après le #
@@ -71,6 +72,8 @@ export default function App() {
       {/* Choix de la page selon la route */}
       {route === '/projects' ? (
         <Projects query={query} />
+      ) : route === '/contact' ? (
+        <Contact />
       ) : route === '/about' ? (
         <About />
       ) : (

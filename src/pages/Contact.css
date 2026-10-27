@@ -1,0 +1,54 @@
+/* =============================================================
+   pages/Contact.css — Page Contact
+   ============================================================= */
+.contact-title {
+  color: #0754a5;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.contact-intro { color: #616161; margin: 8px 0 24px; max-width: 640px; }
+
+/* Grille de cartes : autant de colonnes de 220px min que possible */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  background: white;
+  border: 1px solid #ececec;
+  transition: box-shadow 0.2s ease;
+}
+.contact-card:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); }
+.contact-icon { font-size: 1.8rem; }
+.contact-card h2 { font-size: 1.1rem; }
+.contact-card p { color: #616161; font-size: 0.9rem; flex: 1; overflow-wrap: anywhere; }
+
+/* Formulaire */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 560px;
+  margin-top: 40px;
+  padding: 24px;
+  background: #f5f7fa;
+}
+.contact-form h2 { color: #0754a5; font-size: 1.3rem; }
+.contact-form label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+.contact-form input,
+.contact-form textarea {
+  font: inherit;
+  font-weight: 400;
+  padding: 10px 12px;
+  border: 1px solid #c7c7c7;
+  border-radius: 4px;
+}
+.contact-form input:focus,
+.contact-form textarea:focus { outline: 2px solid #0754a5; border-color: #0754a5; }
+.contact-form button { border: none; cursor: pointer; font: inherit; font-weight: 700; }

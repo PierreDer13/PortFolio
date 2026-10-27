@@ -2,7 +2,7 @@
 // aboutData.js — Contenu de la page About (fiche "produit")
 // Tout le texte est ici : modifie librement sans toucher à About.jsx
 // =============================================================
-import photo1 from './assets/IMG_0545.JPG'
+import photo1 from './assets/portrait.png'
 import photo2 from './assets/IMG_0560.JPG'
 import photo3 from './assets/IMG_0546.JPG'
 import photo4 from './assets/IMG_0565.JPG'
@@ -37,7 +37,7 @@ export const domains = [
 
 // "Caractéristiques" sous le titre (icône + texte)
 export const specs = [
-    { icon: '📍', text: 'Marseille and ~1 h around, or full remote' },
+    { icon: '📍', text: 'Marseille and anywhere in France' }, 
     { icon: '🚗', text: 'Driving licence B + A, own vehicle' },
     { icon: '🗣️', text: 'English B2' },
     { icon: '📅', text: 'Available now · 33-month apprenticeship' },

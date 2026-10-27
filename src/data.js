@@ -8,7 +8,7 @@
 // anti-cache), utilisable directement dans <img src={...}>
 import projectsImg from './assets/IMG_0565.JPG'
 import resumeImg from './assets/IMG_0560.JPG'
-import aboutImg from './assets/IMG_0546.JPG'
+import aboutImg from './assets/portrait.png'
 
 // ---------- Liens réutilisés à plusieurs endroits ----------
 export const CONTACT_EMAIL = 'pierre.der-gazerian@epitech.eu'
@@ -17,6 +17,9 @@ export const CozyDesk = 'https://cozydesk-demo.vercel.app/'
 // Lien interne vers la page Projects (lu par useHashRoute dans App.jsx)
 export const PROJECTS_URL = '#/projects'
 export const ABOUT_URL = '#/about'
+export const CONTACT_URL = '#/contact'
+export const GITHUB_URL = 'https://github.com/PierreDer13'
+export const LINKEDIN_URL = 'https://www.linkedin.com/in/pierre-der-gazerian-566a941b8/'
 
 // ---------- Barre de navigation ----------
 // Nav.jsx fait un .map() sur ce tableau : 1 objet = 1 lien
@@ -25,7 +28,7 @@ export const navLinks = [
   { label: 'Resume', href: RESUME_URL },
   { label: 'About', href: ABOUT_URL },
   // Template string `...${}` : insère la variable dans le texte
-  { label: 'Contact', href: `mailto:${CONTACT_EMAIL}` },
+  { label: 'Contact', href: CONTACT_URL },
 ]
 
 // ---------- Cartes de la page d'accueil ----------
@@ -101,3 +104,12 @@ export const projects = [
     preview: 'soon',
   },
 ]
+  // ---------- Cartes de la page Contact ----------
+// 1 objet = 1 carte. `external: true` → ouvre dans un nouvel onglet
+export const contactChannels = [
+  { icon: '✉️', title: 'Email', text: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}`, cta: 'Send an email' },
+  { icon: '💼', title: 'LinkedIn', text: "Let's connect", href: LINKEDIN_URL, cta: 'View my profile', external: true },
+  { icon: '💻', title: 'GitHub', text: 'PierreDer13', href: GITHUB_URL, cta: 'See my code', external: true },
+  { icon: '📄', title: 'Resume', text: 'Education · Skills', href: RESUME_URL, cta: 'View my resume', external: true },
+]
+

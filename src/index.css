@@ -1,6 +1,8 @@
-* {margin: 0;
-box-sizing: border-box;
+* {
+  margin: 0;
+  box-sizing: border-box;
 }
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -9,47 +11,66 @@ box-sizing: border-box;
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-body{
-font-family: "Inter", Arial, sans-serif;
+
+body {
+  font-family: "Inter", Arial, sans-serif;
 }
 
-.announcement-bar{
+.announcement-bar {
   background-color: #FFCD4E;
   color: #111;
   font-size: 0.7rem;
   font-weight: 500;
   overflow: hidden;
 }
+
 .announcement-track {
   display: flex;
   width: max-content;
   animation: scroll-left 25s linear infinite;
 }
+
 .announcement-group {
   display: flex;
   flex-shrink: 0;
 }
+
 .announcement-group p {
   padding: 10px 40px;
   white-space: nowrap;
 }
+
 .announcement-bar a {
   color: #0875e1;
   font-weight: 700;
   text-decoration: none;
 }
+
 @keyframes scroll-left {
-  from { transform: translateX(0);}
-  to { transform: translateX(-50%);}
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
+
 .announcement-bar:hover .announcement-track {
   animation-play-state: paused;
 }
-@media (prefers-reduced-motion: reduce){
-  .announcement-track { animation: none;}
-.announcement-group[aria-hidden="true"] { display: none; }}
 
-header{
+@media (prefers-reduced-motion: reduce) {
+  .announcement-track {
+    animation: none;
+  }
+
+  .announcement-group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+header {
 
   background-color: #0754a5;
   align-items: center;
@@ -58,12 +79,14 @@ header{
   text-align: center;
   min-height: 120px;
 }
+
 header h1 {
   color: white;
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -1.5px;
 }
+
 .main-nav {
   background-color: #FFCD4E;
   border-bottom: 1px solid #e5e5e5;
@@ -71,6 +94,7 @@ header h1 {
   top: 0;
   z-index: 100;
 }
+
 .main-nav ul {
   display: flex;
   justify-content: center;
@@ -78,6 +102,7 @@ header h1 {
   list-style: none;
   padding: 0;
 }
+
 .main-nav a {
   display: block;
   padding: 14px 20px;
@@ -95,15 +120,18 @@ header h1 {
 
 .search-section {
   background-color: white;
-  padding: 5px 2px;
-  text-align: center;
-  margin-left: 5%;
-  margin-right: 5%;
+  padding: 5px 0;
+  max-width: 1100px;
+  /* même largeur que la bannière */
+  margin: 0 auto;
+  /* centrée */
 }
+
 .search-bar {
-display: flex;
+  display: flex;
 
 }
+
 .search-bar input {
   border: 2px solid #0875e1;
   border-radius: 50px 0 0 50px;
@@ -112,6 +140,7 @@ display: flex;
   font-size: 1rem;
   padding: 14px 16px;
 }
+
 .search-bar button {
   background-color: #0875e1;
   border: 2px solid #0875e1;
@@ -123,17 +152,109 @@ display: flex;
   padding: 14px 24px;
 }
 
-.hero-image-section {
-  padding: 0;
-  text-align: center;
+/* HERO — bannière promo bleue */
+.hero-banner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 16px auto 8px;
+  padding: 24px 32px;
+  background: #0754a5;
+  color: white;
+  border-radius: 8px;
 }
-.hero-image {
-  display: block;
-  height: auto;
-  margin: 0 ;
-  max-width: 100%;
-  width: 100%;
+
+.hero-portrait {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  /* rond */
+  object-fit: cover;
+  /* recadre sans déformer */
+  object-position: top;
+  /* garde le visage */
+  border: 3px solid white;
+  flex-shrink: 0;
+  /* ne rétrécit jamais */
 }
+
+.hero-text {
+  flex: 1;
+}
+
+/* prend toute la place du milieu */
+.hero-text h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 6px 0 4px;
+}
+
+.hero-text p {
+  opacity: 0.9;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: #FFCD4E;
+  color: #111;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  opacity: 1 !important;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero-btn {
+  padding: 12px 20px;
+  border-radius: 50px;
+  background: white;
+  color: #0754a5;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hero-btn:hover {
+  background: #FFCD4E;
+  color: #111;
+}
+
+.hero-btn.is-outline {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.hero-btn.is-outline:hover {
+  background: white;
+  color: #0754a5;
+}
+
+/* Mobile : tout empilé et centré */
+@media (max-width: 700px) {
+  .hero-banner {
+    flex-direction: column;
+    text-align: center;
+    margin: 12px;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .search-section {
+    margin: 0 12px;
+  }
+}
+
 /* EXPLORE MY PORTFOLIO-CATEGORIES */
 .portfolio-categories {
   margin: 32px auto;
@@ -141,7 +262,7 @@ display: flex;
   padding: 0 20px;
 }
 
-.portfolio-categories > h2 {
+.portfolio-categories>h2 {
   color: #0754a5;
   margin-bottom: 24px;
   text-align: center;
@@ -151,22 +272,19 @@ display: flex;
   header {
     padding: 0 16px;
   }
-    body {
 
-    }
-    
-}
-
-
-
-
-@media (min-width: 768px) and (max-width: 1023px) { 
+  body {}
 
 }
 
 
-@media (min-width: 1024px) {
-}
+
+
+@media (min-width: 768px) and (max-width: 1023px) {}
+
+
+@media (min-width: 1024px) {}
+
 .no-result {
   text-align: center;
   color: #555;
@@ -186,10 +304,19 @@ header h1 a {
 /* Mobile : la barre de recherche et la nav ne débordent plus.
    min-width: 0 → sans ça, un <input> dans un flex refuse de
    rétrécir sous sa largeur par défaut et pousse le bouton hors écran */
-.search-bar input { min-width: 0; }
+.search-bar input {
+  min-width: 0;
+}
 
 @media (max-width: 767px) {
+
   /* flex-wrap : les liens passent à la ligne s'il n'y a pas la place */
-  .main-nav ul { gap: 0; flex-wrap: wrap; }
-  .main-nav a { padding: 12px 12px; }
+  .main-nav ul {
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .main-nav a {
+    padding: 12px 12px;
+  }
 }
