@@ -38,7 +38,7 @@ export const categories = [
   {
     title: 'My projects',
     brand: 'React · Java',       // ligne en majuscules au-dessus du titre
-    badge: '2 projects',         // étiquette en haut à gauche de la photo
+    badge: '3 projects',         // étiquette en haut à gauche de la photo
     text: 'Discover the digital projects I have created or still working on!',
     cta: 'View my projects →',
     href: PROJECTS_URL, // → ouvre la page Projects
@@ -104,6 +104,25 @@ export const projects = [
     href: null,              // pas encore de lien → bouton désactivé
     cta: 'Preview coming soon',
     preview: 'soon',
+  },
+  {
+    id: 'portfolio',
+    status: 'live',
+    badge: 'You are here',
+    brand: 'React · Vite',
+    title: 'This Portfolio',
+    tagline: 'My digital portfolio, designed like a Decathlon shop.',
+    description:
+      'The site you are browsing: 4 pages, project search, downloadable resume and contact page. Built with React and deployed automatically on GitHub Pages.',
+    tags: ['React', 'Vite', 'GitHub Pages', 'Accessibility'],
+    context: 'Epitech · 2026',
+    // Pastilles "coloris" : la charte du portfolio
+    swatches: ['#0754A5', '#FFCD4E', '#0875E1', '#616161', '#F5F7FA'],
+    href: 'https://pierreder13.github.io/PortFolio/',
+    cta: 'View the live site',
+    repo: 'https://github.com/PierreDer13/PortFolio',
+    repoCta: 'View the code on GitHub',
+    preview: 'site',         // visuel : mini-maquette du site (SiteMock)
   },
 ]
   // ---------- Cartes de la page Contact ----------

@@ -5,6 +5,7 @@
 // =============================================================
 import Mug3D from './Mug3D'
 import ComingSoon from './ComingSoon'
+import SiteMock from './SiteMock'
 
 export default function ProjectCard({ project }) {
   // "Destructuring" : on sort chaque champ de l'objet dans sa propre variable
@@ -21,7 +22,7 @@ export default function ProjectCard({ project }) {
         {/* Badge jaune (en ligne) ou gris foncé (en cours) */}
         <span className={`project-badge ${isLive ? 'is-live' : 'is-wip'}`}>{badge}</span>
         {/* Choix du visuel selon le champ `preview` de data.js */}
-        {preview === 'mug' ? <Mug3D /> : <ComingSoon />}
+        {preview === 'mug' ? <Mug3D /> : preview === 'site' ? <SiteMock /> : <ComingSoon />}
       </div>
 
       {/* ---- Texte ---- */}

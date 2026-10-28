@@ -1,0 +1,35 @@
+/* Fenêtre de navigateur miniature */
+.site-mock {
+  width: 78%;
+  margin: auto;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;            /* les coins arrondis coupent le contenu */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+/* Petit effet au survol de la fiche */
+.project-card:hover .site-mock { transform: translateY(-4px) rotate(-1deg); }
+
+.mock-browser { display: flex; gap: 5px; padding: 7px 10px; background: #e9edf2; }
+.mock-browser span { width: 8px; height: 8px; border-radius: 50%; background: #c3cad3; }
+
+.mock-announce { height: 8px; background: #FFCD4E; }
+.mock-header { height: 22px; background: #0754a5; }
+
+.mock-hero {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px;
+  padding: 10px;
+  background: #0754a5;
+  border-radius: 6px;
+}
+.mock-avatar { width: 22px; height: 22px; border-radius: 50%; background: white; flex-shrink: 0; }
+.mock-lines { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.mock-lines i { display: block; height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.8); }
+.mock-lines i:last-child { width: 60%; background: #FFCD4E; }
+
+.mock-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 10px 12px; }
+.mock-cards span { height: 38px; border-radius: 4px; background: #f5f7fa; border: 1px solid #e3e6ea; }
