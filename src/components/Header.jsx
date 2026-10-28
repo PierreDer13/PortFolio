@@ -1,7 +1,7 @@
 // =============================================================
 // components/Header.jsx — Bandeau bleu avec le titre du site
 // =============================================================
-import logo from '../assets/logo.svg'
+import logo from '../assets/logo-mark.svg' // P blanc seul, sans carré de fond
 
 export default function Header() {
   return (
