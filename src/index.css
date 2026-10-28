@@ -304,6 +304,18 @@ header h1 {
 header h1 a {
   color: inherit;
   text-decoration: none;
+  display: inline-flex;   /* logo et nom alignés sur la même ligne */
+  align-items: center;
+  gap: 12px;
+}
+
+/* Logo « Arc souple » à gauche du nom */
+.header-logo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 22%;                          /* suit les coins arrondis du logo */
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35); /* fin liseré pour le détacher du header bleu */
 }
 
 /* Lien actif dans la nav : cible l'attribut aria-current posé par Nav.jsx */
