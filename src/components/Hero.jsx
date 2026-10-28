@@ -13,7 +13,7 @@ export default function Hero() {
         {/* Petite étiquette jaune, comme les badges promo */}
         <p className="hero-badge">Open to work</p>
         <h2>Data &amp; AI apprentice · 33 months</h2>
-        <p>Available now — Marseille and anywhere in France</p>
+        <p>Available from January — Marseille and anywhere in France</p>
       </div>
 
       <div className="hero-actions">

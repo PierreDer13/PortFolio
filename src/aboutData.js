@@ -40,7 +40,7 @@ export const specs = [
     { icon: '📍', text: 'Marseille and anywhere in France' }, 
     { icon: '🚗', text: 'Driving licence B + A, own vehicle' },
     { icon: '🗣️', text: 'English B2' },
-    { icon: '📅', text: 'Available now · 33-month apprenticeship' },
+    { icon: '📅', text: 'Available from January · 33-month apprenticeship' },
 ]
 
 // ---------- Onglets dépliables sous la fiche ----------

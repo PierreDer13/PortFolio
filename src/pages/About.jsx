@@ -58,7 +58,7 @@ export default function About() {
           <p className="about-pitch">{domain.pitch}</p>
 
           {/* Statut, à la place du prix */}
-          <p className="project-status is-live about-status">Available now</p>
+          <p className="project-status is-live about-status">Available from January</p>
 
           {/* Choix du domaine, comme le choix de taille sur Decathlon */}
           <div className="about-domains">
