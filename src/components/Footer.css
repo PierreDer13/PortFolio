@@ -1,0 +1,12 @@
+/* =============================================================
+   components/Footer.css — Pied de page volontairement effacé
+   ============================================================= */
+.site-footer {
+  max-width: 1100px;            /* même largeur que la bannière et les pages */
+  margin: 48px auto 0;
+  padding: 20px 16px 28px;
+  border-top: 1px solid #ececec; /* simple trait fin, sans fond coloré */
+  text-align: center;
+  font-size: 0.8rem;
+  color: #616161;               /* gris secondaire : lisible mais discret */
+}

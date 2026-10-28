@@ -11,6 +11,7 @@ import AnnouncementBar from './components/AnnouncementBar'
 import Header from './components/Header'
 import Nav from './components/Nav'
 import SearchBar from './components/SearchBar'
+import Footer from './components/Footer'
 
 // Les deux pages du site
 import Home from './pages/Home'
@@ -79,6 +80,9 @@ export default function App() {
       ) : (
         <Home query={query} />
       )}
+
+      {/* Pied de page discret, commun à toutes les pages */}
+      <Footer />
     </>
   )
 }
