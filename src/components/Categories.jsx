@@ -1,7 +1,7 @@
 // =============================================================
 // components/Categories.jsx — Section « Explore my portfolio » de l'accueil
 // Reçoit la liste des cartes (déjà filtrée par la recherche dans Home.jsx)
-// et affiche une CategoryCard par élément, ou « Aucun résultat ».
+// et affiche une CategoryCard par élément, ou « No results ».
 // =============================================================
 import CategoryCard from './CategoryCard'
 
@@ -15,7 +15,7 @@ export default function Categories({ items }) {
           // {...cat} : passe tous les champs de la carte (title, text, img...) comme props
           items.map((cat) => <CategoryCard key={cat.title} {...cat} />)
         ) : (
-          <p className="no-result">Aucun résultat.</p>
+          <p className="no-result">No results.</p>
         )}
       </div>
     </section>

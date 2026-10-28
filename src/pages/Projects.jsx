@@ -76,7 +76,7 @@ export default function Projects({ query }) {
           ))}
         </div>
       ) : (
-        <p className="no-result">Aucun projet ne correspond.</p>
+        <p className="no-result">No matching project.</p>
       )}
     </main>
   )

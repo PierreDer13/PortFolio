@@ -6,7 +6,7 @@
 import { CONTACT_EMAIL } from '../data'
 
 // Texte du bandeau, modifiable ici
-const MESSAGE = 'Open to work: alternance data/IA de 33 mois à partir de janvier'
+const MESSAGE = 'Open to work: 33-month data & AI apprenticeship starting in January'
 
 // Un groupe = 3 messages ; on l'affiche 2 fois pour la boucle infinie du défilement
 function Group({ hidden }) {
@@ -16,7 +16,7 @@ function Group({ hidden }) {
       {[0, 1, 2].map((i) => (
         <p key={i}>
           {MESSAGE}
-          <a href={`mailto:${CONTACT_EMAIL}`}>&nbsp;&nbsp; Me contacter →</a>
+          <a href={`mailto:${CONTACT_EMAIL}`}>&nbsp;&nbsp; Contact me →</a>
         </p>
       ))}
     </div>

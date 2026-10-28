@@ -33,7 +33,7 @@ export default function Home({ query }) {
       {/* L'image d'accueil disparaît dès qu'on tape : les résultats remontent en haut */}
       {!q && <Hero />}
 
-      {/* On cache les catégories (et leur "Aucun résultat") si seul un projet correspond */}
+      {/* On cache les catégories (et leur "No results") si seul un projet correspond */}
       {(filtered.length > 0 || matchingProjects.length === 0) && <Categories items={filtered} />}
 
       {/* Résultats dans les projets : n'apparaît que s'il y en a */}
