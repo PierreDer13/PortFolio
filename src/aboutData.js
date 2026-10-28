@@ -69,4 +69,5 @@ export const background = [
 
 export const interests = [
     { icon: '🏃', title: 'Running & trail', text: 'I train and track my runs with Strava and Kiprun Pacer.' },
+    { icon: '🔨', title: 'Renovation', text: 'A full-time renovation project alongside my studies: planning, organisation and hands-on work.' },
 ]
