@@ -1,7 +1,7 @@
 // =============================================================
 // components/Hero.jsx — Bannière "offre du moment" façon Decathlon
 // =============================================================
-import portrait from '../assets/portrait.png'
+import portrait from '../assets/portrait.jpg'
 import { PROJECTS_URL, CONTACT_URL, RESUME_PDF } from '../data'
 
 export default function Hero() {

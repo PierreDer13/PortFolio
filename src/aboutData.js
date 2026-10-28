@@ -2,7 +2,7 @@
 // aboutData.js — Contenu de la page About (fiche "produit")
 // Tout le texte est ici : modifie librement sans toucher à About.jsx
 // =============================================================
-import photo1 from './assets/portrait.png'
+import photo1 from './assets/portrait.jpg'
 import photo2 from './assets/IMG_0560.JPG'
 import photo3 from './assets/IMG_0546.JPG'
 import photo4 from './assets/IMG_0565.JPG'

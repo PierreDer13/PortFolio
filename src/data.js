@@ -8,7 +8,7 @@
 // anti-cache), utilisable directement dans <img src={...}>
 import projectsImg from './assets/IMG_0565.JPG'
 import resumeImg from './assets/IMG_0560.JPG'
-import aboutImg from './assets/portrait.png'
+import aboutImg from './assets/portrait.jpg'
 
 // ---------- Liens réutilisés à plusieurs endroits ----------
 export const CONTACT_EMAIL = 'pierre.der-gazerian@epitech.eu'
