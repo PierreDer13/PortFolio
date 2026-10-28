@@ -2,7 +2,7 @@
 // components/Hero.jsx — Bannière "offre du moment" façon Decathlon
 // =============================================================
 import portrait from '../assets/portrait.png'
-import { PROJECTS_URL, CONTACT_URL } from '../data'
+import { PROJECTS_URL, CONTACT_URL, RESUME_PDF } from '../data'
 
 export default function Hero() {
   return (
@@ -18,6 +18,10 @@ export default function Hero() {
 
       <div className="hero-actions">
         <a href={PROJECTS_URL} className="hero-btn">View my projects</a>
+        {/* download = le navigateur télécharge le fichier au lieu de quitter le site */}
+        <a href={RESUME_PDF} download className="hero-btn is-download">
+          ⬇ Download my resume
+        </a>
         <a href={CONTACT_URL} className="hero-btn is-outline">Contact me</a>
       </div>
     </section>

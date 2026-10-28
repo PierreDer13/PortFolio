@@ -238,6 +238,16 @@ header h1 {
   color: #0754a5;
 }
 
+/* Bouton CV : jaune, pour attirer l'œil comme un bouton "promo" */
+.hero-btn.is-download {
+  background: #FFCD4E;
+  color: #111;
+}
+.hero-btn.is-download:hover {
+  background: white;
+  color: #0754a5;
+}
+
 /* Mobile : tout empilé et centré */
 @media (max-width: 700px) {
   .hero-banner {

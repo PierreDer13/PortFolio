@@ -20,6 +20,8 @@ export const ABOUT_URL = '#/about'
 export const CONTACT_URL = '#/contact'
 export const GITHUB_URL = 'https://github.com/PierreDer13'
 export const LINKEDIN_URL = 'https://www.linkedin.com/in/pierre-der-gazerian-566a941b8/'
+// CV en PDF, rangé dans public/ → servi à côté de index.html
+export const RESUME_PDF = './CV_DER_GAZERIAN_PIERRE.pdf'
 
 // ---------- Barre de navigation ----------
 // Nav.jsx fait un .map() sur ce tableau : 1 objet = 1 lien
