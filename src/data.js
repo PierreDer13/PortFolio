@@ -131,6 +131,6 @@ export const contactChannels = [
   { icon: '✉️', title: 'Email', text: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}`, cta: 'Send an email' },
   { icon: '💼', title: 'LinkedIn', text: "Let's connect", href: LINKEDIN_URL, cta: 'View my profile', external: true },
   { icon: '💻', title: 'GitHub', text: 'PierreDer13', href: GITHUB_URL, cta: 'See my code', external: true },
-  { icon: '📄', title: 'Resume', text: 'Education · Skills', href: RESUME_URL, cta: 'View my resume', external: true },
+  { icon: '📄', title: 'Resume', text: 'PDF · Education · Skills', href: RESUME_PDF, cta: 'Download my resume', external: true },
 ]
 
