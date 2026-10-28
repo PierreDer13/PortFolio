@@ -1,34 +1,39 @@
 # Build le site React et le publie sur GitHub Pages à chaque push sur main
 name: Deploy to GitHub Pages
 
+# Déclencheurs : chaque push sur main, ou à la main depuis l'onglet Actions
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+# Droits minimum : lire le code, publier sur Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Si deux déploiements se suivent, l'ancien est annulé
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
+  # 1) Construire le site
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4          # récupère le code du dépôt
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+      - run: npm ci                         # installe les dépendances (versions exactes du lock)
+      - run: npm run build                  # Vite génère le site final dans dist/
+      - uses: actions/upload-pages-artifact@v3   # envoie dist/ à GitHub Pages
         with:
           path: dist
 
+  # 2) Mettre en ligne (seulement si le build a réussi)
   deploy:
     needs: build
     runs-on: ubuntu-latest

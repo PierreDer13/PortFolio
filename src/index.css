@@ -1,8 +1,16 @@
+/* =============================================================
+   index.css — Styles communs à tout le site
+   (bandeau, header, nav, recherche, bannière, cartes de l'accueil)
+   Les pages ont en plus leur propre fichier (Projects.css, About.css…)
+   ============================================================= */
+
+/* Remise à zéro : pas de marges par défaut, tailles qui incluent les bordures */
 * {
   margin: 0;
   box-sizing: border-box;
 }
 
+/* Caché à l'écran mais lu par les lecteurs d'écran (accessibilité) */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -16,6 +24,7 @@ body {
   font-family: "Inter", Arial, sans-serif;
 }
 
+/* ---- Bandeau jaune défilant ---- */
 .announcement-bar {
   background-color: #FFCD4E;
   color: #111;
@@ -46,6 +55,7 @@ body {
   text-decoration: none;
 }
 
+/* Défilement vers la gauche : on décale de la moitié (= un groupe) puis ça recommence */
 @keyframes scroll-left {
   from {
     transform: translateX(0);
@@ -60,6 +70,7 @@ body {
   animation-play-state: paused;
 }
 
+/* Si l'utilisateur a désactivé les animations : bandeau fixe */
 @media (prefers-reduced-motion: reduce) {
   .announcement-track {
     animation: none;
@@ -70,6 +81,7 @@ body {
   }
 }
 
+/* ---- Header bleu ---- */
 header {
 
   background-color: #0754a5;
@@ -87,6 +99,7 @@ header h1 {
   letter-spacing: -1.5px;
 }
 
+/* ---- Barre de navigation jaune, collée en haut au défilement (sticky) ---- */
 .main-nav {
   background-color: #FFCD4E;
   border-bottom: 1px solid #e5e5e5;
@@ -118,6 +131,7 @@ header h1 {
   border-bottom-color: #0875e1;
 }
 
+/* ---- Barre de recherche ---- */
 .search-section {
   background-color: white;
   padding: 5px 0;
