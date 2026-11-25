@@ -651,14 +651,24 @@ const wanted = () => {
   const s = sections.find((x) => { const r = x.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; }) || sections[0];
   return MUSIC[s.id] || ['music'];
 };
-const track = (n) => tracks[n] || (tracks[n] = Object.assign(new Audio(`audio/${n}.mp3`), {loop:true, preload:'auto', volume:0}));
+// On garde notre propre volume (a._v) : le navigateur arrondit a.volume,
+// et sur Safari/iPhone il est en lecture seule → les pistes ne se coupaient jamais
+const track = (n) => tracks[n] || (tracks[n] = Object.assign(new Audio(`audio/${n}.mp3`), {loop:true, preload:'auto', volume:0, _v:0}));
 setInterval(() => {
   const want = soundOn ? wanted() : [];
+  Object.entries(tracks).forEach(([n, a]) => {
+    if (!want.includes(n) && a._v <= 0 && !a.paused) a.pause();   // filet de sécurité
+  });
   want.forEach((n) => { const a = track(n); if (a.paused) a.play().catch(() => {}); });
   Object.entries(tracks).forEach(([n, a]) => {
     const target = want.includes(n) ? (VOL[n] || .6) : 0;
-    a.volume = Math.max(0, Math.min(1, a.volume + Math.sign(target - a.volume) * Math.min(.04, Math.abs(target - a.volume))));
-    if (a.volume === 0 && target === 0 && !a.paused) a.pause();
+    const step = Math.min(.04, Math.abs(target - a._v));
+    a._v = Math.max(0, Math.min(1, a._v + Math.sign(target - a._v) * step));
+    if (a._v < .01 && target === 0) {           // fondu terminé → on coupe vraiment
+      a._v = 0;
+      if (!a.paused) { a.pause(); a.currentTime = 0; }
+    }
+    a.volume = a._v;
   });
 }, 60);
 $('#snd').addEventListener('click', () => {
