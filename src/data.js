@@ -91,18 +91,21 @@ export const projects = [
     preview: 'mug',          // visuel : 'mug' = tasse 3D | 'soon' = "coming soon"
   },
   {
-    id: 'java-game',
-    status: 'wip',
-    badge: 'In progress',
-    brand: 'Java',
-    title: 'Java Game',
-    tagline: 'A game written in Java, currently in development.',
-    description: 'Work in progress: gameplay and preview coming soon.',
-    tags: ['Java', 'OOP'],
-    context: '',             // vide → rien d'affiché
-    swatches: [],            // vide → pas de pastilles
-    href: null,              // pas encore de lien → bouton désactivé
-    cta: 'Preview coming soon',
+    id: 'oni-shin-tan',
+    status: 'live',
+    badge: 'Playable',
+    brand: 'Java · JavaFX',
+    title: 'Oni Shin Tan 鬼神譚',
+    tagline: 'A Hearthstone-style card game set in Edo-period Japan.',
+    description:
+      '4 heroes, 122 cards, PvP hotseat with Oaths, an Adventure mode against an AI and a final boss, Yamata no Orochi. I built the model, engine, data and AI; a teammate built the UI.',
+    tags: ['Java 17', 'JavaFX', 'OOP', 'Game AI'],
+    context: 'Epitech · 2026',
+    swatches: ['#0c0a09', '#efe4cf', '#d23a22', '#22344f', '#b9ab93'],
+    href: './oni-shin-tan/',
+        cta: 'Discover the game',
+    repo: 'https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip',
+    repoCta: 'Download for Windows (.zip)',
     preview: 'soon',
   },
   {

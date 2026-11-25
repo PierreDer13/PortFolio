@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oni Shin Tan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* VOICE: a tale told by lamplight, slow and cinematic, few words per screen.
+   IDEA: a descent, as on Samana's dive: from the streets of Edo down to Yomi, where Orochi waits. A depth gauge counts the way down.
+   PICTURE: the game's own ukiyo-e art (boards, hero scrolls, cards) full bleed, with ink weather drawn on one canvas.
+   COLOUR and TYPE: sumi ink ground, washi paper text, one vermilion seal; Shippori Mincho for the tale, Zen Kaku Gothic for the rest.
+   LAYOUT: full-screen scenes, some pinned while their content turns; a fixed gauge bottom right, a seal top left. */
+:root{color-scheme:dark;--ink:#0c0a09;--ink2:#17120f;--washi:#efe4cf;--soft:#b9ab93;--shu:#d23a22;--ai:#22344f;--disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",Georgia,serif;--body:"Zen Kaku Gothic New","Hiragino Sans","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--ink);color:var(--washi);font:17px/1.6 var(--body);overflow-x:clip}
+body.loading{overflow:hidden}
+img{display:block;max-width:100%}
+h2{font:800 clamp(34px,5.4vw,60px)/1.05 var(--disp);margin:0 0 .4em;text-wrap:balance}
+p{margin:0 0 1em;max-width:62ch}
+a{color:inherit}
+.soft{color:var(--soft)}
+.jp{font-family:var(--disp);color:var(--shu)}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:15}
+/* preloader */
+#pre{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--ink);transition:opacity .9s .5s}
+#pre .k{font:800 clamp(90px,18vw,180px)/1 var(--disp);color:var(--washi);height:1em}
+#pre .cap{position:absolute;bottom:12vh;left:0;right:0;text-align:center;color:var(--soft);font-size:14px;letter-spacing:.04em}
+#pre .n{font-variant-numeric:tabular-nums;color:var(--washi);margin-right:.6em}
+.door{position:fixed;top:0;bottom:0;width:50.5%;z-index:49;background:var(--ink2) repeating-linear-gradient(90deg,transparent 0 calc(25% - 2px),#2a221b calc(25% - 2px) 25%),repeating-linear-gradient(0deg,transparent 0 calc(16.6% - 2px),#2a221b calc(16.6% - 2px) 16.6%);transition:transform 1.4s cubic-bezier(.7,0,.2,1)}
+.door.l{left:0}.door.r{right:0}
+body.open .door.l{transform:translateX(-101%)}body.open .door.r{transform:translateX(101%)}
+body.open #pre{opacity:0;pointer-events:none}
+/* HUD */
+.hud{position:fixed;z-index:20;text-shadow:0 1px 8px #000;font-size:13px;color:var(--washi);display:flex;align-items:center;gap:10px}
+.seal{top:12px;left:max(16px,2vw)}
+.seal img{width:44px;height:44px}
+#snd{top:16px;right:max(16px,2vw);background:#0c0a0999;border:1px solid #ffffff33;color:var(--washi);font:500 13px var(--body);min-height:44px;padding:0 16px;border-radius:22px;cursor:pointer}
+#snd:focus-visible,.btn:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+#snd[aria-pressed=true]{border-color:var(--shu)}
+#tocBtn{background:none;border:0;color:var(--washi);font:700 13px var(--body);cursor:pointer;min-height:44px;padding:0 10px 0 0;display:flex;align-items:center;gap:10px}
+#tocBtn i{font-style:normal;color:var(--soft);transition:transform .3s}#tocBtn[aria-expanded=true] i{transform:rotate(180deg)}
+#toc{position:fixed;top:68px;left:max(16px,2vw);z-index:21;background:#0c0a09f2;border:1px solid #ffffff22;border-radius:10px;padding:8px;min-width:250px;box-shadow:0 20px 50px #000;transform-origin:top left;transition:opacity .25s,transform .25s}
+#toc[hidden]{display:block!important;opacity:0;transform:scale(.96) translateY(-6px);pointer-events:none}
+#toc a{display:flex;gap:12px;align-items:baseline;padding:9px 12px;border-radius:6px;text-decoration:none;font-size:15px}
+#toc a:hover,#toc a:focus-visible,#toc a.cur{background:#ffffff12;outline:none}
+#toc a span{font-family:var(--disp);color:var(--shu);width:2.4em;flex:none}
+.rail{left:0;right:0;bottom:0;height:3px;background:#ffffff14}
+.rail i{display:block;height:100%;width:0;background:var(--shu)}
+/* scenes */
+.scene{position:relative;min-height:100vh;padding:clamp(80px,12vh,140px) max(6vw,18px);display:grid;align-content:center}
+.bg{position:absolute;inset:0;overflow:hidden;z-index:-1}
+.bg img{width:100%;height:100%;object-fit:cover}
+.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--ink) 0,transparent 22%,transparent 70%,var(--ink) 100%)}
+.wrap{max-width:1240px;width:100%;margin:0 auto;position:relative;z-index:6}
+.tall{height:var(--h,400vh);padding:0}
+.stage{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;align-content:center;padding:80px max(6vw,18px)}
+/* hero */
+#edo{align-content:end}
+#edo .bg::after{background:linear-gradient(180deg,transparent 35%,#0c0a09d9 78%,var(--ink))}
+.title{display:flex;gap:clamp(16px,3vw,40px);align-items:flex-start}
+.title .t{max-width:560px;text-shadow:0 2px 14px #000}
+.title .name{font:800 clamp(34px,4.6vw,56px)/1.05 var(--disp);margin:0 0 .4em}
+.hint{margin-top:2em;font-size:14px;color:var(--soft)}
+/* manifesto */
+.tale{font:500 clamp(26px,3.6vw,44px)/1.35 var(--disp);max-width:24ch;margin:0 auto;text-wrap:balance}
+.tale span{opacity:.16;transition:opacity .25s}
+.tale span.on{opacity:1}
+.tale em{font-style:normal;color:var(--shu)}
+/* heroes: four clans, each hero placed one by one */
+.clans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 48px;margin-top:4px}
+#paths .wrap{max-width:1100px}
+#paths h2{margin-bottom:.2em}
+.clan header{display:flex;gap:14px;align-items:baseline;margin-bottom:8px}
+.clan header b{font:800 40px/1 var(--disp);color:var(--shu)}
+.clan header h3{margin:0;font:800 24px/1.1 var(--disp)}
+.clan header p{margin:0;font-size:14px;color:var(--soft)}
+.trio{display:flex;justify-content:flex-start;gap:8px}
+.hero{position:relative;margin:0;border-radius:10px;overflow:hidden;aspect-ratio:356/462;height:clamp(150px,calc((100vh - 340px)/2.7),280px);width:auto;max-width:calc((100% - 16px)/3);flex:none;background:#e6cfa3;box-shadow:0 14px 30px #000b;opacity:0;transform:translateY(40px) rotate(-3deg) scale(.9);transition:opacity .7s,transform .8s cubic-bezier(.2,.8,.2,1.2),box-shadow .3s;cursor:pointer;outline:none}
+.hero.in{opacity:1;transform:none}
+.hero img{width:100%;height:100%;object-fit:contain;transition:transform .5s}
+.hero figcaption{position:absolute;inset:auto 0 0 0;padding:34px 10px 10px;background:linear-gradient(180deg,#0c0a0900,#0c0a09f0 40%);font-size:13px;line-height:1.35;transform:translateY(calc(100% - 46px));transition:transform .4s}
+.hero figcaption b{display:block;font:800 16px/1.2 var(--disp);margin-bottom:4px}
+.hero figcaption b span{color:var(--shu);margin-left:6px;font-size:13px}
+.hero figcaption i{font-style:normal;color:var(--soft)}
+.hero.in:hover,.hero.in:focus-visible{transform:translateY(-8px) scale(1.04);box-shadow:0 0 0 2px var(--shu),0 24px 40px #000;z-index:2}
+.hero:hover img,.hero:focus-visible img{transform:scale(1.06)}
+.hero:hover figcaption,.hero:focus-visible figcaption{transform:none}
+/* the 122 cards: a serpent */
+.clsbg{position:absolute;inset:0;z-index:0}
+.clsbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s;filter:saturate(.8) brightness(.55)}
+.clsbg img.on{opacity:1}
+.clsbg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0c0a09f2 0,#0c0a09b3 28%,#0c0a0966 60%,#0c0a09cc 100%)}
+.clsname{position:absolute;right:max(6vw,18px);bottom:20px;z-index:1;margin:0;font:800 clamp(40px,7vw,96px)/1 var(--disp);color:#efe4cf26;text-align:right;pointer-events:none}
+.snake,#train,.snake-title,.hinfo{z-index:2}
+.seg{cursor:pointer}
+.seg img{transition:transform .25s,box-shadow .25s}
+.seg.hov{z-index:50}
+.seg.hov img{transform:scale(2.1) translateY(-18%);box-shadow:0 0 0 2px var(--shu),0 20px 40px #000}
+.snake-stage{padding:0;display:block}
+.snake-title{position:absolute;top:78px;left:max(6vw,18px);right:max(6vw,18px);z-index:3;font-size:clamp(28px,3.6vw,44px)}
+.snake{position:absolute;inset:0;width:100%;height:100%}
+.snake .spine{fill:none;stroke:#ffffff10;stroke-width:2;stroke-dasharray:2 10}
+.snake .body{fill:none;stroke:url(#scales);stroke-width:26;stroke-linecap:round;opacity:.9}
+#train{position:absolute;inset:0}
+.seg{position:absolute;left:0;top:0;width:var(--w);margin:calc(var(--w)*-.7) 0 0 calc(var(--w)*-.5);transition:filter .3s;will-change:transform}
+.seg img{width:100%;aspect-ratio:200/280;border-radius:6px;box-shadow:0 10px 24px #000b;border:2px solid #0000}
+.seg.on img{border-color:var(--shu)}
+.seg.cls{width:calc(var(--w)*.9);margin-top:calc(var(--w)*-.45);aspect-ratio:1;border-radius:50%;background:var(--shu);display:grid;place-items:center;font:800 calc(var(--w)*.34)/1 var(--disp);color:var(--washi);box-shadow:0 0 0 6px #d23a2233,0 14px 30px #000}
+.seg.cls small{display:block;font:700 13px var(--body);margin-top:-1.6em}
+.hinfo{position:absolute;left:max(6vw,18px);right:max(6vw,18px);top:146px;z-index:3;display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.1fr);gap:8px 28px;align-items:start;min-height:120px}
+.hinfo .hk{font:800 clamp(52px,6vw,80px)/1 var(--disp);color:var(--shu);grid-row:span 2}
+.hinfo h3{margin:0;font:800 clamp(26px,3vw,36px)/1.1 var(--disp)}
+.hinfo h3 span{font-size:.6em;color:var(--soft);margin-left:.4em}
+.hinfo .bio{font-size:15px;color:var(--soft);margin:6px 0 0}
+.hinfo .stats{font-size:14px;color:var(--washi);margin-top:4px}
+.hinfo dl{margin:0;font-size:14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px}
+.hinfo dt{color:var(--soft)}.hinfo dd{margin:0}
+/* oaths: one column per class, rows aligned, each vow with its own motion */
+.oaths{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto repeat(3,1fr);grid-auto-flow:column;gap:10px 14px;margin-top:34px}
+.ocol{display:contents}
+.ocol h3{margin:0;font:800 22px var(--disp);display:flex;gap:10px;align-items:baseline;border-bottom:2px solid var(--shu);padding:0 4px 8px}
+.ocol h3 span{color:var(--shu)}
+.oath{display:grid;grid-template-columns:56px minmax(0,1fr);align-content:start;gap:4px 12px;padding:14px;background:#ffffff08;border:1px solid #ffffff14;border-radius:10px;height:100%}
+.oath .ok{grid-row:span 2;font:800 28px/1.1 var(--disp);writing-mode:vertical-rl;justify-self:center;position:relative}
+.oath b{font-size:16px}
+.oath p{margin:0;font-size:14px;color:var(--soft);line-height:1.45}
+.oaths.on .ok{animation:var(--a) 1.8s ease-in-out 1 both}
+@keyframes honor{0%,60%,100%{text-shadow:none;color:var(--washi)}70%{text-shadow:0 0 18px #fff;color:#fff}}
+@keyframes allegiance{0%,100%{transform:none}50%{transform:translateY(4px) rotate(-6deg)}}
+@keyframes justice{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes silence{0%,100%{opacity:1;filter:none}50%{opacity:.25;filter:blur(3px)}}
+@keyframes deception{0%,88%,100%{transform:none;text-shadow:none}90%{transform:translateX(-4px);text-shadow:6px 0 #d23a22,-6px 0 #5da3ff}94%{transform:translateX(3px)}}
+@keyframes discipline{0%,24%{transform:none}25%,49%{transform:translateY(-3px)}50%,74%{transform:none}75%,100%{transform:translateY(3px)}}
+@keyframes purity{0%,100%{text-shadow:0 0 0 #fff}50%{text-shadow:0 0 22px #fff,0 0 4px #fff}}
+@keyframes peace{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes divinity{0%,100%{text-shadow:0 0 8px #ffd27a00}50%{text-shadow:0 0 26px #ffd27a,0 0 6px #ffd27a}}
+@keyframes havoc{0%,100%{transform:none;color:var(--washi)}10%,30%{transform:translate(-3px,2px) rotate(-3deg);color:#ff6a3d}20%,40%{transform:translate(3px,-2px) rotate(3deg)}50%{transform:none}}
+@keyframes descension{0%{transform:translateY(-30px);opacity:0}25%{transform:translateY(3px);opacity:1}32%,100%{transform:none}}
+@keyframes corruption{0%,100%{color:var(--washi);filter:none}50%{color:#7d3cff;filter:drop-shadow(0 6px 4px #7d3cff88)}}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,5vw,72px);align-items:center}
+/* godai */
+.gorinto{display:grid;justify-items:center;gap:6px}
+.gorinto div{position:relative;overflow:hidden;border-radius:12px;padding:10px 14px;background:#ffffff06;display:flex;align-items:center;gap:14px;width:min(100%,470px);opacity:.25;transform:translateX(-14px);transition:opacity .6s,transform .6s}
+.gorinto div.on{opacity:1;transform:none}
+.gorinto img,.gorinto p{position:relative;z-index:1}.gorinto img{width:64px;height:64px;flex:none}
+.gorinto canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.gorinto b{font:800 22px var(--disp);display:block}
+.gorinto span{font-size:14px;color:var(--soft)}
+/* boards */
+#boards .bg img{position:absolute;inset:0;opacity:0;transition:opacity 1.2s,transform 8s linear;transform:scale(1.08)}
+#boards .bg img.on{opacity:.85;transform:scale(1)}
+#boards .bg img:first-child{transition:opacity 1.2s}
+#boards .bg::after{background:radial-gradient(ellipse at 50% 55%,transparent 30%,#0c0a09cc 100%),linear-gradient(180deg,transparent 75%,var(--ink))}
+.bslide{display:grid}
+.bintro,.bcur{grid-area:1/1;will-change:transform,opacity}
+#boards .bg{opacity:var(--bo,0)}
+.bname{font:800 clamp(48px,8vw,104px)/1 var(--disp);text-shadow:0 6px 40px #000}
+/* in game */
+.player{margin-top:24px;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px;align-items:start}
+.player video{width:100%;aspect-ratio:16/9;border-radius:10px;background:#000;box-shadow:0 30px 70px #000,0 0 0 1px #ffffff1a}
+.clips{display:grid;gap:8px}
+.clips button{min-height:52px;text-align:left;padding:8px 14px;border-radius:8px;border:1px solid #ffffff1f;background:#ffffff08;color:var(--washi);font:500 15px var(--body);cursor:pointer;display:flex;gap:10px;align-items:center}
+.clips button span{font-family:var(--disp);color:var(--shu);font-size:20px}
+.clips button[aria-selected=true]{border-color:var(--shu);background:#d23a221f}
+.clips button:focus-visible{outline:2px solid var(--shu)}
+.shots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.shots figure{margin:0;cursor:zoom-in}
+.shots img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;transition:transform .35s,box-shadow .35s}
+.shots figure:hover img,.shots figure:focus-visible img{transform:translateY(-6px) scale(1.03);box-shadow:0 0 0 2px var(--shu),0 20px 40px #000}
+.shots figcaption{font-size:14px;color:var(--soft);margin-top:6px}
+.lightbox{position:fixed;inset:0;z-index:40;background:#0c0a09f2;display:grid;place-items:center;align-content:center;gap:14px;padding:20px}
+.lightbox[hidden]{display:none}
+.lightbox img{max-width:min(1280px,94vw);max-height:78vh;border-radius:10px}
+.lightbox p{margin:0;color:var(--soft)}
+/* adventure */
+.frames{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:30px}
+.frames figure{margin:0}
+.frames img{aspect-ratio:3/2;object-fit:cover;width:100%;filter:saturate(.9)}
+.frames figcaption{font-size:14px;color:var(--soft);margin-top:6px}
+/* orochi */
+#yomi{background:#120606}
+#yomi .bg img{opacity:.55}
+.boss-l{font:700 15px var(--body);color:var(--shu);margin:0 0 6px;display:flex;align-items:center;gap:12px}.boss-l::before,.boss-l::after{content:"";height:1px;width:48px;background:var(--shu)}
+.boss{font:800 clamp(56px,7.4vw,112px)/1.1 var(--disp);white-space:nowrap;margin:0 0 .15em;filter:drop-shadow(0 0 24px #d23a2288);letter-spacing:.04em}
+.boss span{display:inline-block;background:linear-gradient(180deg,#ffe3b0 0,#f2a33a 45%,#b3201a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;transform:translateY(.4em) scale(1.3);filter:blur(8px);transition:opacity .9s,transform 1.1s cubic-bezier(.2,.7,.2,1),filter .9s}
+.on .boss span{opacity:1;transform:none;filter:none}
+@keyframes breathe{0%,100%{filter:drop-shadow(0 0 18px #d23a2266)}50%{filter:drop-shadow(0 0 44px #ff5a2ccc)}}
+.on .boss{animation:breathe 3.2s 1.6s ease-in-out infinite}
+.facts{display:flex;flex-wrap:wrap;gap:14px 40px;margin-top:24px}
+.facts div b{display:block;font:800 30px/1.1 var(--disp)}
+.facts div span{font-size:14px;color:var(--soft)}
+/* build */
+.nums{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;background:#ffffff12;margin:30px 0}
+.nums div{background:var(--ink);padding:22px 18px}
+.nums b{display:block;font:800 clamp(30px,4vw,44px)/1 var(--disp)}
+.nums span{font-size:14px;color:var(--soft)}
+.tree{font-size:15px;columns:2;column-gap:40px;color:var(--soft)}
+.tree div{break-inside:avoid;margin-bottom:10px}.tree b{color:var(--washi);font-weight:700}
+/* end */
+#end{text-align:center;justify-items:center}
+#end .bg img{opacity:.5}
+.dl{display:inline-flex;align-items:center;text-decoration:none;margin:24px 0 8px;font-size:17px;padding:0 28px;min-height:52px;border-radius:28px;box-shadow:0 0 30px #d23a2288}
+.steps{list-style:none;padding:0;margin:18px auto;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;align-items:center;counter-reset:s}
+.steps li{counter-increment:s;display:flex;align-items:center;gap:10px}.steps li::before{content:counter(s);font:800 22px var(--disp);color:var(--shu)}
+.small{font-size:14px}
+.cmd{display:inline-flex;align-items:center;gap:12px;background:#ffffff0d;border:1px solid #ffffff22;border-radius:30px;padding:6px 6px 6px 22px;font:15px ui-monospace,Menlo,Consolas,monospace}
+.btn{min-height:44px;padding:0 20px;border-radius:24px;border:0;background:var(--shu);color:#fff;font:700 15px var(--body);cursor:pointer}
+.team{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 48px;margin-top:20px}
+.team b{display:block;font:800 26px var(--disp)}
+.team span{font-size:14px;color:var(--soft)}
+footer{padding:30px 18px 60px;text-align:center;font-size:13px;color:var(--soft)}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 1s,transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.reveal.on{opacity:1;transform:none}
+@media(max-width:860px){.player{grid-template-columns:minmax(0,1fr)}.clips{grid-template-columns:repeat(2,minmax(0,1fr))}.shots{grid-template-columns:repeat(2,minmax(0,1fr))}.oaths{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(3,1fr) auto repeat(3,1fr)}#paths{height:auto}#paths .stage{position:static;height:auto}.clans{grid-template-columns:minmax(0,1fr)}.hero{height:auto;width:calc((100% - 28px)/3)}.split{grid-template-columns:minmax(0,1fr)}.hinfo{grid-template-columns:auto minmax(0,1fr)}.hinfo dl{grid-column:1/-1;display:none}.nums{grid-template-columns:repeat(2,minmax(0,1fr))}.frames{grid-template-columns:repeat(2,minmax(0,1fr))}.tree{columns:1}.pinfo{min-height:300px}}
+@media(max-width:600px){body{font-size:16px}.hinfo{top:176px}.oaths{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-flow:row}.snake-title{font-size:26px}.oaths{grid-template-columns:minmax(0,1fr)}.hinfo .hk{font-size:44px}.scene{padding-bottom:110px}#edo .bg img{object-position:50% 30%}.gauge b{font-size:20px}.seal span{display:none}.stage{padding:70px 18px}.scroll-img{aspect-ratio:8/4.4}}
+@media(prefers-reduced-motion:reduce){.reveal,.scroll-img img,.pinfo article,.door,#boards .bg img{transition:none}#fx{display:none}}
+</style>
+</head>
+<body class="loading">
+<div id="pre" role="status"><div class="k" id="pk">鬼</div><div class="cap"><span class="n" id="pn">0</span>the spirits take a moment.</div></div>
+<div class="door l"></div><div class="door r"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<div class="hud seal"><button id="tocBtn" aria-expanded="false" aria-controls="toc"><img src="img/logo.webp" alt=""><span>Oni Shin Tan</span><i>▾</i></button></div>
+<nav id="toc" hidden aria-label="Contents"></nav>
+<button class="hud" id="snd" aria-pressed="false">Sound off</button>
+<div class="hud rail"><i id="rail"></i></div>
+
+<main>
+<section class="scene" id="edo" data-fx="petals" data-realm="Oni Shin Tan" data-k="鬼">
+  <div class="bg"><img src="img/home.jpg" alt=""></div>
+  <div class="wrap title">
+    <div class="t">
+      <h1 class="name">Oni Shin Tan <span class="jp">鬼神譚</span></h1>
+      <p>A card game of demons and gods, set in Edo-period Japan. Four heroes, 122 cards, a vow to keep, and an eight-headed dragon at the bottom of the world.</p>
+      <p class="soft">Java 17 and JavaFX 21 · Epitech T-JAV-501 · Pierre and Kayne</p>
+      <p class="hint">Scroll to begin the tale, or open the seal for the contents</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="tale" data-fx="ink" data-realm="The tale" data-k="譚">
+  <p class="tale" id="taleText">In old Edo, tales of oni and kami were told by lamplight. We turned them into a game, where every card is a tale and every match a legend told twice. <em>Pick a path. Swear an oath. Go down.</em></p>
+</section>
+
+<section class="tall" id="paths" style="--h:320vh" data-fx="petals" data-realm="Classes and heroes" data-k="侍">
+  <div class="stage">
+    <div class="wrap">
+      <h2>Four paths, twelve heroes</h2>
+      <div class="clans" id="clans"></div>
+    </div>
+  </div>
+</section>
+
+<section class="tall" id="kami" style="--h:480vh" data-fx="ink" data-realm="The 122 cards" data-k="札">
+  <div class="stage snake-stage">
+    <div class="clsbg" id="clsbg"><img src="img/story-samurai-1-1.jpg" alt="" data-c="SAMURAI"><img src="img/story-ninja-1-1.jpg" alt="" data-c="NINJA"><img src="img/story-kannushi-1-1.jpg" alt="" data-c="KANNUSHI"><img src="img/story-oni-1-1.jpg" alt="" data-c="ONI"><img src="img/board-town.jpg" alt="" data-c="NEUTRAL"></div>
+    <p class="clsname" id="clsname"></p>
+    <h2 class="snake-title">122 cards, from rice farmers to Amaterasu</h2>
+    <svg class="snake" id="snake" aria-hidden="true"><path id="spath" class="spine"/><path id="sbody" class="body"/></svg>
+    <div id="train"></div>
+    <div class="hinfo" id="hinfo" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="scene" id="oaths" data-fx="embers" data-realm="Oaths" data-k="誓">
+  <div class="wrap reveal">
+    <h2>Swear an oath before the first card</h2>
+    <p>In a duel, both players choose a vow from their class. Each turn kept adds a stack, and at 3, 6 and 9 stacks the gods add a reward. Break it, and you pay a penalty and become an Oathbreaker until you swear again. Each player also has a chess clock: seven minutes, red and ticking under thirty seconds.</p>
+    <p class="soft">The Uragiri 裏切り cards only work for an Oathbreaker. AI-against-AI simulations show that breaking your vow on purpose never pays.</p>
+    <div class="oaths" id="oathGrid"></div>
+  </div>
+</section>
+
+<section class="scene" id="godai" data-fx="ink" data-realm="Godai" data-k="五">
+  <div class="wrap split">
+    <div class="reveal">
+      <h2>Godai 五大, the power of Takeda Shingen</h2>
+      <p>Play Takeda Shingen and your hero becomes him. Once per turn, for 2 Ki, a gorintō rises from the board and you pick one of its five stones.</p>
+    </div>
+    <div class="gorinto" id="gorinto"></div>
+  </div>
+</section>
+
+<section class="scene" id="ingame" data-fx="ink" data-realm="In the game" data-k="戦">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Straight from the game</h2>
+      <p>Recorded from a real Adventure battle: Shuten-dōji against the Ninja of the town.</p>
+    </div>
+    <div class="player reveal">
+      <video id="clip" src="media/play.mp4" autoplay muted loop playsinline preload="auto"></video>
+      <div class="clips" id="clips" role="tablist" aria-label="Gameplay clips"></div>
+    </div>
+    <div class="shots reveal" id="shots"></div>
+  </div>
+  <div class="lightbox" id="lightbox" hidden><img alt="" id="lbimg"><p id="lbcap"></p><button class="btn" id="lbclose">Close</button></div>
+</section>
+
+<section class="tall" id="boards" style="--h:440vh" data-fx="embers" data-realm="The boards" data-k="卓">
+  <div class="stage">
+    <div class="bg" id="bbg"></div>
+    <div class="wrap bslide">
+      <div class="bintro" id="bintro"><p class="boss-l">Four tables</p><p class="bname"><span class="jp">卓</span> The boards</p><p>Every match is played on one of four painted tables, each with its own weather.</p></div>
+      <div class="bcur" id="bcur"><p class="bname" id="bname"></p><p id="btext"></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="shura" data-fx="embers" data-realm="Adventure" data-k="道">
+  <div class="wrap reveal">
+    <h2>The Adventure: three battles per path</h2>
+    <p>Each class has its own story, told in ukiyo-e between the battles. Win a battle and pick an upgrade for the next one. In Shura no Michi 修羅の道 the hard AI fights you from the start, and your wounds carry over from one battle to the next.</p>
+    <div class="frames" id="frames"></div>
+  </div>
+</section>
+
+<section class="scene" id="yomi" data-fx="red" data-realm="Final boss: Orochi" data-k="蛇">
+  <div class="bg"><img src="img/board-dragon.jpg" alt=""></div>
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="boss-l">The final boss</p>
+      <p class="boss" id="boss">八岐大蛇</p>
+      <h2>Yamata no Orochi, the eight-headed serpent</h2>
+      <p>The final boss wakes once all four Adventures are done, in normal and in Shura no Michi. He starts with twelve cards in hand, and his hero power Yatsu-kubi 八つ首 strikes eight times at random, harder as he bleeds.</p>
+      <div class="facts">
+        <div><b>200</b><span>HP</span></div>
+        <div><b>100</b><span>cards in his deck</span></div>
+        <div><b>8</b><span>heads, 8 hits</span></div>
+        <div><b>10 · 15 · 20</b><span>turns his mythic rises</span></div>
+      </div>
+    </div>
+    <img class="reveal" src="img/card-yamata-no-orochi.webp" alt="The Yamata no Orochi card" style="width:min(100%,340px);justify-self:center;border-radius:12px;box-shadow:0 30px 80px #000">
+  </div>
+</section>
+
+<section class="scene" id="build" data-fx="ink" data-realm="Under the hood" data-k="技">
+  <div class="wrap reveal">
+    <h2>Under the board, an engine that never draws</h2>
+    <p>The rules engine never imports JavaFX. The interface and the AI both play through one façade, GameEngine, and they listen to the events it publishes. Each card effect is registered by its id, so a new card is one line of JSON and one entry in the registry.</p>
+    <div class="nums">
+      <div><b>Java 17</b><span>with JavaFX 21 and Maven</span></div>
+      <div><b>334</b><span>JUnit tests</span></div>
+      <div><b>122</b><span>cards in cards.json</span></div>
+      <div><b>3</b><span>AI levels</span></div>
+      <div><b>~50,000</b><span>simulated AI games for balance</span></div>
+    </div>
+    <div class="tree">
+      <div><b>model</b> · cards, minions, heroes, decks, boards, the chess clock</div>
+      <div><b>engine</b> · the GameEngine façade, with event, turn, effect, oath and system</div>
+      <div><b>engine.system</b> · hero powers, Orochi, Curses, Rites, Traps, hand, board, targeting</div>
+      <div><b>data</b> · cards.json, the Adventure decks, saves in ~/.onishintan</div>
+      <div><b>ai</b> · the AIController, easy, hard and extreme</div>
+      <div><b>ui</b> · the JavaFX screens, match HUD, effects and dialogs</div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="end" data-fx="red" data-realm="Download and play" data-k="遊">
+  <div class="bg"><img src="img/story-orochi-8.jpg" alt=""></div>
+  <div class="wrap reveal">
+    <h2>You reached Yomi. Orochi is waiting.</h2>
+    <p class="soft" style="margin:0 auto">Download the game for Windows: nothing else to install.</p>
+    <a class="btn dl" href="https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip">Download for Windows (.zip)</a>
+    <ol class="steps">
+      <li>Unzip the folder.</li>
+      <li>Open the <b>OniShinTan</b> folder.</li>
+      <li>Double-click <b>OniShinTan.exe</b>.</li>
+    </ol>
+    <p class="soft small">Java is bundled inside the zip. If Windows SmartScreen warns you, click <i>More info</i> then <i>Run anyway</i>.</p>
+    <div class="team">
+      <div><b>Pierre</b><span>model, engine, data, AI</span></div>
+      <div><b>Kayne</b><span>interface, art, sound</span></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer>Oni Shin Tan · Epitech Marseille · T-JAV-501 · 2026. All art and cards are from the game.</footer>
+
+<script>
+{
+const $ = (s) => document.querySelector(s);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* content */
+const PATHS = [
+  {k:'侍', n:'Samurai', power:'Katana: pick a blade, from the 1 Ki Bokken to the 9 Ki Honjō Masamune.', fam:'Rites summon Ancestors that carry the bonuses of every Rite before them.', oaths:'Honor, Allegiance, Justice',
+   heroes:[['yasuke','Yasuke','弥助','A man from Africa who served Oda Nobunaga from 1581 and fought beside him at Honnō-ji.'],['tomoe-gozen','Tomoe Gozen','巴御前','A warrior of the Genpei War, praised in the Tale of the Heike for her bow and her sword.'],['miyamoto-musashi','Miyamoto Musashi','宮本武蔵','The swordsman of more than sixty duels, author of The Book of Five Rings.']]},
+  {k:'忍', n:'Ninja', power:'Shuriken: 6 damage to any target.', fam:'Traps are set face down and sprung by an enemy attack, summon or spell.', oaths:'Silence, Deception, Discipline',
+   heroes:[['hattori-hanzo','Hattori Hanzō','服部半蔵','Of Iga descent, he led Tokugawa Ieyasu to safety in 1582; a gate of Edo Castle bears his name.'],['fujibayashi-yasutake','Fujibayashi Yasutake','藤林保武','In 1676 he gathered the secrets of Iga and Kōga into the Bansenshūkai.'],['jinichi-kawakami','Jinichi Kawakami','川上仁一','Called the last ninja, head of the Ban family of Kōga ninjutsu.']]},
+  {k:'神', n:'Kannushi', power:'Miko: a 3/3 shrine maiden, and every third call the Miko grow.', fam:'Shrines bless the minions next to them for a few turns.', oaths:'Purity, Peace, Divinity',
+   heroes:[['kada-no-azumamaro','Kada no Azumamaro','荷田春満','Shinto priest of Fushimi Inari, who opened the way for the National Learning school.'],['yamazaki-ansai','Yamazaki Ansai','山崎闇斎','Scholar who joined Confucian teaching with Shinto and founded Suika Shinto.'],['yoshikawa-koretaru','Yoshikawa Koretaru','吉川惟足','Founder of Yoshikawa Shinto, named the shogunate\'s official for Shinto matters.']]},
+  {k:'鬼', n:'Oni', power:'Jikininki: drain 4 HP and heal your own hero.', fam:'Curses are slipped into the enemy hand or deck and strike when held or drawn.', oaths:'Havoc, Descension, Corruption',
+   heroes:[['shuten-doji','Shuten-dōji','酒呑童子','Chief of the oni of Mount Ōe, who raided Kyoto until Raikō\'s band slew him.'],['ibaraki-doji','Ibaraki-dōji','茨木童子','His chief retainer, who lost an arm at Rashōmon and came back in disguise for it.'],['kane-doji','Kane-dōji','金童子','One of the four oni lieutenants who guarded the fortress on Mount Ōe.']]}
+];
+const CARDS = [{"id":"ashigaru","type":"MINION","name":"Ashigaru","kanji":"足軽","heroClass":"SAMURAI","ki":2,"rarity":"COMMON","text":"Tatakae","attack":4,"health":4},{"id":"rite-of-shokan","type":"RITE","name":"Rite of Shōkan","kanji":"召喚の儀","heroClass":"SAMURAI","ki":2,"rarity":"COMMON","text":"Summon a 2/2 Ancestor. Future Ancestors: +1/+1","attack":null,"health":null},{"id":"chiburi","type":"SPELL","name":"Chiburi","kanji":"血振り","heroClass":"SAMURAI","ki":2,"rarity":"COMMON","text":"Give your weapon +1 durability","attack":null,"health":null},{"id":"katana-kaji","type":"MINION","name":"Katana kaji","kanji":"刀鍛冶","heroClass":"SAMURAI","ki":3,"rarity":"COMMON","text":"Banzai: your weapon gets +3 ATK","attack":6,"health":6},{"id":"ueta-rikishi","type":"MINION","name":"Ueta rikishi","kanji":"飢えた力士","heroClass":"SAMURAI","ki":3,"rarity":"COMMON","text":"Shirodu","attack":5,"health":8},{"id":"rite-of-gokito","type":"RITE","name":"Rite of Gokitō","kanji":"御祈祷の儀","heroClass":"SAMURAI","ki":3,"rarity":"COMMON","text":"Summon a 2/2 Ancestor. Future Ancestors: Banzai: draw a card (stacks)","attack":null,"health":null},{"id":"yoroi","type":"SPELL","name":"Yoroi","kanji":"鎧","heroClass":"SAMURAI","ki":3,"rarity":"COMMON","text":"Give your hero and a friendly minion 6 armour","attack":null,"health":null},{"id":"mamori-shu","type":"MINION","name":"Mamori-shū","kanji":"守衆","heroClass":"SAMURAI","ki":3,"rarity":"COMMON","text":"Shirodu. Banzai: give another friendly minion Shirodu","attack":3,"health":5},{"id":"kosho","type":"MINION","name":"Kosho","kanji":"小姓","heroClass":"SAMURAI","ki":3,"rarity":"COMMON","text":"Passive: when your hero attacks with a weapon, this minion strikes the same target too","attack":3,"health":4},{"id":"hatamoto","type":"MINION","name":"Hatamoto","kanji":"旗本","heroClass":"SAMURAI","ki":4,"rarity":"COMMON","text":"Shirodu. Passive: end of turn, your hero gains 3 armour","attack":6,"health":7},{"id":"rite-of-ujigami-mairi","type":"RITE","name":"Rite of Ujigami-mairi","kanji":"氏神参りの儀","heroClass":"SAMURAI","ki":4,"rarity":"COMMON","text":"Summon a 2/2 Ancestor with Torii. Future Ancestors: +1 Torii (stacks)","attack":null,"health":null},{"id":"iaido","type":"SPELL","name":"Iaidō","kanji":"居合道","heroClass":"SAMURAI","ki":4,"rarity":"COMMON","text":"Destroy your weapon; deal its ATK to all minions","attack":null,"health":null},{"id":"ketto","type":"SPELL","name":"Kettō","kanji":"決闘","heroClass":"SAMURAI","ki":4,"rarity":"COMMON","text":"Choose any 2 minions to duel: a random one wins and survives on half its HP, the other dies","attack":null,"health":null},{"id":"ronin","type":"MINION","name":"Ronin","kanji":"浪人","heroClass":"SAMURAI","ki":5,"rarity":"COMMON","text":"Passive: while it is your only minion, +6/+6","attack":8,"health":8},{"id":"rite-of-daijosai","type":"RITE","name":"Rite of Daijōsai","kanji":"大嘗祭","heroClass":"SAMURAI","ki":5,"rarity":"COMMON","text":"Summon a 2/2 Ancestor with Tatakae. Future Ancestors: Tatakae and +1/+1","attack":null,"health":null},{"id":"totsugeki","type":"SPELL","name":"Totsugeki","kanji":"突撃","heroClass":"SAMURAI","ki":5,"rarity":"COMMON","text":"All your minions gain Tatakae and +4 ATK","attack":null,"health":null},{"id":"jujutsu-shihan","type":"MINION","name":"Jujutsu shihan","kanji":"師範","heroClass":"SAMURAI","ki":6,"rarity":"COMMON","text":"Seppuku: give your hero Honjō Masamune","attack":7,"health":8},{"id":"rite-of-sanpasen","type":"RITE","name":"Rite of Sanpasen","kanji":"儀式","heroClass":"SAMURAI","ki":6,"rarity":"COMMON","text":"Summon 2 Ancestors with Shirodu. Future Ancestors: Shirodu","attack":null,"health":null},{"id":"daimyo","type":"MINION","name":"Daimyō","kanji":"大名","heroClass":"SAMURAI","ki":7,"rarity":"COMMON","text":"Banzai: equip your hero with a Katana (8/1)","attack":9,"health":9},{"id":"rite-of-mukaebi","type":"RITE","name":"Rite of Mukaebi","kanji":"迎え火","heroClass":"SAMURAI","ki":7,"rarity":"COMMON","text":"Summon 3 Ancestors. Future Ancestors: +2/+2","attack":null,"health":null},{"id":"takemikazuchi","type":"MINION","name":"Takemikazuchi","kanji":"建御雷","heroClass":"SAMURAI","ki":8,"rarity":"LEGENDARY","text":"Tatakae. Banzai: equip your hero with Futsu-no-mitama (10/2)","attack":10,"health":9},{"id":"shogun","type":"MINION","name":"Shōgun","kanji":"将軍","heroClass":"SAMURAI","ki":9,"rarity":"LEGENDARY","text":"Banzai: all friendly minions +4/+4","attack":12,"health":12},{"id":"zeni-nage","type":"SPELL","name":"Zeni-nage","kanji":"銭投げ","heroClass":"NINJA","ki":0,"rarity":"COMMON","text":"X Ki: spend all your Ki and deal that much damage, split among enemies","attack":null,"health":null},{"id":"genin","type":"MINION","name":"Genin","kanji":"下忍","heroClass":"NINJA","ki":1,"rarity":"COMMON","text":"Shinobi","attack":3,"health":3},{"id":"kawarimi","type":"TRAP","name":"Kawarimi","kanji":"変わり身","heroClass":"NINJA","ki":1,"rarity":"COMMON","text":"An enemy attacks a minion: summon a 0/9 tree that takes the hit","attack":null,"health":null},{"id":"makibishi","type":"TRAP","name":"Makibishi","kanji":"撒菱","heroClass":"NINJA","ki":1,"rarity":"COMMON","text":"The enemy summons a minion: deal 6 damage to it","attack":null,"health":null},{"id":"kemuri-dama","type":"SPELL","name":"Kemuri-dama","kanji":"煙玉","heroClass":"NINJA","ki":1,"rarity":"COMMON","text":"Give any minion Shinobi (with Shirodu too, its Shirodu is ignored)","attack":null,"health":null},{"id":"kuji-in","type":"SPELL","name":"Kuji-in","kanji":"九字印","heroClass":"NINJA","ki":1,"rarity":"COMMON","text":"Refresh your hero power","attack":null,"health":null},{"id":"komuso","type":"MINION","name":"Komusō","kanji":"虚無僧","heroClass":"NINJA","ki":2,"rarity":"COMMON","text":"Shinobi. Passive: end of turn, heal your hero 4","attack":2,"health":4},{"id":"noppera-bo","type":"MINION","name":"Noppera-bō","kanji":"のっぺら坊","heroClass":"NINJA","ki":2,"rarity":"COMMON","text":"Shinobi. Seppuku: return to your hand","attack":4,"health":2},{"id":"oyasumi","type":"TRAP","name":"Oyasumi","kanji":"お休み","heroClass":"NINJA","ki":2,"rarity":"COMMON","text":"The enemy casts a spell: 2 random enemy minions fall asleep until the end of their next turn","attack":null,"health":null},{"id":"otoshiana","type":"TRAP","name":"Otoshiana","kanji":"落とし穴","heroClass":"NINJA","ki":2,"rarity":"COMMON","text":"An enemy minion attacks your hero: cancel the attack, it falls asleep until the end of its next turn","attack":null,"health":null},{"id":"yoi","type":"SPELL","name":"Yōi","kanji":"用意","heroClass":"NINJA","ki":2,"rarity":"COMMON","text":"Cards in your hand cost 1 less Ki","attack":null,"health":null},{"id":"onnagata","type":"MINION","name":"Onnagata","kanji":"女形","heroClass":"NINJA","ki":3,"rarity":"COMMON","text":"Shinobi. Banzai: set its ATK to an enemy minion's ATK","attack":2,"health":7},{"id":"kitsune-no-bakashiya","type":"MINION","name":"Kitsune no bakashiya","kanji":"狐の化かし屋","heroClass":"NINJA","ki":3,"rarity":"COMMON","text":"Shinobi. Banzai: transform into a copy of a minion","attack":3,"health":3},{"id":"shikomi-andon","type":"TRAP","name":"Shikomi andon","kanji":"仕込み行灯","heroClass":"NINJA","ki":3,"rarity":"COMMON","text":"An enemy minion attacks a minion: deal 14 damage to the attacker first","attack":null,"health":null},{"id":"kakuremino","type":"SPELL","name":"Kakuremino","kanji":"隠れ蓑","heroClass":"NINJA","ki":3,"rarity":"COMMON","text":"Give all friendly minions Shinobi","attack":null,"health":null},{"id":"shuriken-uchi","type":"MINION","name":"Shuriken-uchi","kanji":"手裏剣打ち","heroClass":"NINJA","ki":3,"rarity":"COMMON","text":"Banzai: your Shuriken deals +2 damage for the rest of the match","attack":1,"health":1},{"id":"suiton-no-jutsu","type":"SPELL","name":"Suiton no jutsu","kanji":"水遁の術","heroClass":"NINJA","ki":3,"rarity":"COMMON","text":"Return a friendly minion to your hand","attack":null,"health":null},{"id":"tengu","type":"MINION","name":"Tengu","kanji":"天狗","heroClass":"NINJA","ki":4,"rarity":"COMMON","text":"Shinobi","attack":8,"health":7},{"id":"dondengaeshi","type":"TRAP","name":"Dondengaeshi","kanji":"どんでん返し","heroClass":"NINJA","ki":4,"rarity":"COMMON","text":"The enemy plays a minion: summon a copy of it on your side","attack":null,"health":null},{"id":"jonin","type":"MINION","name":"Jōnin","kanji":"上忍","heroClass":"NINJA","ki":6,"rarity":"COMMON","text":"Shinobi. Passive: your other Shinobi minions have +3 ATK","attack":8,"health":8},{"id":"kagemusha","type":"MINION","name":"Kagemusha","kanji":"影武者","heroClass":"NINJA","ki":6,"rarity":"LEGENDARY","text":"Banzai: the next time your hero would die, it survives on 1 HP and can't be harmed until your next turn","attack":2,"health":2},{"id":"fuma-kotaro","type":"MINION","name":"Fūma Kotarō","kanji":"風魔小太郎","heroClass":"NINJA","ki":7,"rarity":"LEGENDARY","text":"Shinobi. Yogake: when revealed, enemy minions attack each other at random.","attack":9,"health":7},{"id":"tsukuyomi","type":"MINION","name":"Tsukuyomi","kanji":"月読","heroClass":"NINJA","ki":8,"rarity":"LEGENDARY","text":"Banzai: give your other minions shinobi. Shinobi","attack":12,"health":11},{"id":"miko","type":"MINION","name":"Miko","kanji":"巫女","heroClass":"KANNUSHI","ki":1,"rarity":"COMMON","text":"","attack":3,"health":3},{"id":"kodama","type":"MINION","name":"Kodama","kanji":"木霊","heroClass":"KANNUSHI","ki":1,"rarity":"COMMON","text":"Shirodu","attack":1,"health":5},{"id":"heiwa-no-torii","type":"SHRINE","name":"Heiwa no Torii","kanji":"平和の鳥居","heroClass":"KANNUSHI","ki":1,"rarity":"COMMON","text":"Shrine, 2 turns. Adjacent minions: +0/+3; heal 3 at the end of your turn","attack":null,"health":null},{"id":"meiji-otorii","type":"SHRINE","name":"Meiji Ōtorii","kanji":"明治大鳥居","heroClass":"KANNUSHI","ki":2,"rarity":"COMMON","text":"Shrine, 2 turns. Adjacent minions: +3 ATK; heal 3 after attacking","attack":null,"health":null},{"id":"taisha-zukuri","type":"SPELL","name":"Taisha-zukuri","kanji":"大社造","heroClass":"KANNUSHI","ki":2,"rarity":"COMMON","text":"Give a friendly minion Torii","attack":null,"health":null},{"id":"goze","type":"MINION","name":"Goze","kanji":"瞽女","heroClass":"KANNUSHI","ki":3,"rarity":"COMMON","text":"Passive: end of turn, heal all friendly minions 3","attack":4,"health":6},{"id":"kitsune-no-tsukai","type":"MINION","name":"Kitsune no tsukai","kanji":"狐の使い","heroClass":"KANNUSHI","ki":3,"rarity":"COMMON","text":"Torii","attack":6,"health":5},{"id":"itsukushima","type":"SHRINE","name":"Itsukushima","kanji":"厳島","heroClass":"KANNUSHI","ki":3,"rarity":"COMMON","text":"Shrine, 3 turns. Adjacent minions gain Torii at the end of your turn","attack":null,"health":null},{"id":"kotodama","type":"SPELL","name":"Kotodama","kanji":"言霊","heroClass":"KANNUSHI","ki":3,"rarity":"COMMON","text":"Remove all effects from an enemy minion and heal your hero 5","attack":null,"health":null},{"id":"jushoku","type":"MINION","name":"Jūshoku","kanji":"住職","heroClass":"KANNUSHI","ki":4,"rarity":"COMMON","text":"Passive: end of turn, heal your hero 6","attack":5,"health":7},{"id":"yamabushi","type":"MINION","name":"Yamabushi","kanji":"山伏","heroClass":"KANNUSHI","ki":4,"rarity":"COMMON","text":"Banzai: heal 12 to any character","attack":5,"health":6},{"id":"kumano-hongu-taisha","type":"SHRINE","name":"Kumano Hongū Taisha","kanji":"熊野本宮大社","heroClass":"KANNUSHI","ki":4,"rarity":"COMMON","text":"Shrine, 3 turns. Adjacent minions: +2/+4 and Shirodu","attack":null,"health":null},{"id":"harae","type":"SPELL","name":"Harae","kanji":"祓","heroClass":"KANNUSHI","ki":4,"rarity":"COMMON","text":"Heal a character for 15 and draw a card","attack":null,"health":null},{"id":"shishimai","type":"MINION","name":"Shishimai","kanji":"獅子舞","heroClass":"KANNUSHI","ki":4,"rarity":"COMMON","text":"Banzai: +1/+1 for each Miko you summoned this match","attack":4,"health":6},{"id":"onmyoji","type":"MINION","name":"Onmyōji","kanji":"陰陽師","heroClass":"KANNUSHI","ki":5,"rarity":"COMMON","text":"Banzai: give a friendly minion Torii","attack":8,"health":8},{"id":"fushimi-inari","type":"SHRINE","name":"Fushimi Inari","kanji":"伏見稲荷","heroClass":"KANNUSHI","ki":5,"rarity":"COMMON","text":"Shrine, 3 turns. On the opponent's turns, adjacent minions cannot die from a single hit","attack":null,"health":null},{"id":"kiseki","type":"SPELL","name":"Kiseki","kanji":"奇跡","heroClass":"KANNUSHI","ki":6,"rarity":"COMMON","text":"Heal all friendly minions; a minion already at full HP gets +3/+3 instead","attack":null,"health":null},{"id":"senbon-torii","type":"SPELL","name":"Senbon Torii","kanji":"千本鳥居","heroClass":"KANNUSHI","ki":6,"rarity":"COMMON","text":"Give all friendly minions Torii","attack":null,"health":null},{"id":"susanoo","type":"MINION","name":"Susanoo","kanji":"須佐之男","heroClass":"KANNUSHI","ki":7,"rarity":"LEGENDARY","text":"Tatakae. Banzai: deal 6 damage to an enemy minion","attack":11,"health":9},{"id":"motonosumi-shrine","type":"SHRINE","name":"Motonosumi Jinja","kanji":"元乃隅神社","heroClass":"KANNUSHI","ki":7,"rarity":"COMMON","text":"Shrine, 2 turns. Minions up to 2 slots away, and minions played there: +3/+3 and Tatakae","attack":null,"health":null},{"id":"inari-okami","type":"MINION","name":"Inari Ōkami","kanji":"稲荷大神","heroClass":"KANNUSHI","ki":8,"rarity":"LEGENDARY","text":"Passive: end of turn, summon a Kitsune no tsukai","attack":10,"health":11},{"id":"okuninushi","type":"MINION","name":"Ōkuninushi","kanji":"大国主","heroClass":"KANNUSHI","ki":8,"rarity":"LEGENDARY","text":"Banzai: heal all friendly characters for 10","attack":11,"health":12},{"id":"kagura","type":"SPELL","name":"Kagura","kanji":"神楽","heroClass":"KANNUSHI","ki":8,"rarity":"COMMON","text":"Summon 3 Miko (3/3) with Tatakae","attack":null,"health":null},{"id":"bakeneko","type":"CURSE","name":"Bakeneko","kanji":"化け猫","heroClass":"ONI","ki":1,"rarity":"COMMON","text":"Curse in the enemy hand (removal 2 Ki): while held, their minions cost 1 more Ki","attack":null,"health":null},{"id":"gagoze","type":"CURSE","name":"Gagoze","kanji":"元興寺","heroClass":"ONI","ki":1,"rarity":"COMMON","text":"Curse, 3 into the enemy deck: when drawn, 4 damage to a random minion of that player","attack":null,"health":null},{"id":"hinoeuma","type":"CURSE","name":"Hinoeuma","kanji":"丙午","heroClass":"ONI","ki":2,"rarity":"COMMON","text":"Curse in the enemy hand (removal 3 Ki): end of their turn, 8 damage to their hero","attack":null,"health":null},{"id":"tatari","type":"CURSE","name":"Tatari","kanji":"祟り","heroClass":"ONI","ki":2,"rarity":"COMMON","text":"Curse, 5 into the enemy deck: when drawn, 5 damage to that hero","attack":null,"health":null},{"id":"gokiburi","type":"CURSE","name":"Gokiburi","kanji":"ゴキブリ","heroClass":"ONI","ki":2,"rarity":"COMMON","text":"Curse in the enemy hand (removal 3 Ki): end of their turn, eats the card to its left","attack":null,"health":null},{"id":"kamikakushi","type":"SPELL","name":"Kamikakushi","kanji":"神隠し","heroClass":"ONI","ki":2,"rarity":"COMMON","text":"Shuffle a minion back into its owner's deck","attack":null,"health":null},{"id":"chimatsuri","type":"SPELL","name":"Chimatsuri","kanji":"血祭り","heroClass":"ONI","ki":2,"rarity":"COMMON","text":"Destroy a friendly minion and deal its ATK to the enemy hero","attack":null,"health":null},{"id":"hakahori","type":"MINION","name":"Hakahori","kanji":"墓掘り","heroClass":"ONI","ki":3,"rarity":"COMMON","text":"Passive: when a friendly minion dies, +2 ATK","attack":4,"health":7},{"id":"kappa","type":"MINION","name":"Kappa","kanji":"河童","heroClass":"ONI","ki":3,"rarity":"COMMON","text":"Banzai: deal 4 damage to the enemy hero","attack":5,"health":7},{"id":"rokurokubi","type":"MINION","name":"Rokurokubi","kanji":"ろくろ首","heroClass":"ONI","ki":3,"rarity":"COMMON","text":"Can attack a minion behind Shirodu or Torii","attack":6,"health":6},{"id":"gaki","type":"CURSE","name":"Gaki","kanji":"餓鬼","heroClass":"ONI","ki":3,"rarity":"COMMON","text":"Curse in the enemy hand (removal 5 Ki): each turn, they lose 1 playable Ki","attack":null,"health":null},{"id":"sakasama","type":"SPELL","name":"Sakasama","kanji":"逆様","heroClass":"ONI","ki":4,"rarity":"COMMON","text":"Swap the ATK and HP of all enemy minions; their copies in the deck take the new stats","attack":null,"health":null},{"id":"tamashii-gui","type":"SPELL","name":"Tamashii-gui","kanji":"魂喰い","heroClass":"ONI","ki":4,"rarity":"COMMON","text":"Destroy a minion and a random card in the opponent's hand","attack":null,"health":null},{"id":"jorogumo","type":"MINION","name":"Jorōgumo","kanji":"絡新婦","heroClass":"ONI","ki":5,"rarity":"COMMON","text":"Banzai: put an enemy minion to sleep for 1 turn","attack":6,"health":10},{"id":"kuchiyose","type":"SPELL","name":"Kuchiyose","kanji":"口寄せ","heroClass":"ONI","ki":5,"rarity":"COMMON","text":"Return a random dead friendly minion to the board (its Banzai triggers)","attack":null,"health":null},{"id":"oiwa","type":"MINION","name":"Oiwa","kanji":"お岩","heroClass":"ONI","ki":6,"rarity":"COMMON","text":"Seppuku: shuffle 2 random Curses into the enemy deck","attack":9,"health":10},{"id":"nue","type":"MINION","name":"Nue","kanji":"鵺","heroClass":"ONI","ki":7,"rarity":"COMMON","text":"Banzai: deal 6 damage to all other minions","attack":9,"health":9},{"id":"shinigami","type":"MINION","name":"Shinigami","kanji":"死神","heroClass":"ONI","ki":8,"rarity":"COMMON","text":"Banzai: destroy a damaged enemy minion","attack":10,"health":12},{"id":"izanami","type":"MINION","name":"Izanami","kanji":"伊邪那美","heroClass":"ONI","ki":9,"rarity":"LEGENDARY","text":"Banzai: return your 2 highest-cost dead minions to the board","attack":11,"health":11},{"id":"enma","type":"MINION","name":"Enma","kanji":"閻魔","heroClass":"ONI","ki":10,"rarity":"LEGENDARY","text":"Banzai: destroy all other minions with 8 ATK or less","attack":13,"health":14},{"id":"gashadokuro","type":"MINION","name":"Gashadokuro","kanji":"餓者髑髏","heroClass":"ONI","ki":10,"rarity":"LEGENDARY","text":"Costs 1 less for each minion that died this match","attack":12,"health":12},{"id":"omukade","type":"MINION","name":"Ōmukade","kanji":"大百足","heroClass":"ONI","ki":10,"rarity":"LEGENDARY","text":"Tatakae","attack":16,"health":9},{"id":"unsui","type":"MINION","name":"Unsui","kanji":"雲水","heroClass":"NEUTRAL","ki":1,"rarity":"COMMON","text":"Banzai: heal 6 to a friendly character","attack":2,"health":3},{"id":"inasaku-noka","type":"MINION","name":"Inasaku nōka","kanji":"稲作農家","heroClass":"NEUTRAL","ki":1,"rarity":"COMMON","text":"Seppuku: heal your hero 8","attack":2,"health":2},{"id":"monogoi","type":"MINION","name":"Monogoi","kanji":"物乞い","heroClass":"NEUTRAL","ki":1,"rarity":"COMMON","text":"Banzai: if your hand is empty, draw 2","attack":2,"health":3},{"id":"saru","type":"MINION","name":"Saru","kanji":"猿","heroClass":"NEUTRAL","ki":1,"rarity":"COMMON","text":"","attack":4,"health":4},{"id":"koi","type":"MINION","name":"Koi","kanji":"鯉","heroClass":"NEUTRAL","ki":1,"rarity":"COMMON","text":"Seppuku: draw a card","attack":2,"health":2},{"id":"kiji","type":"MINION","name":"Kiji","kanji":"雉","heroClass":"NEUTRAL","ki":1,"rarity":"COMMON","text":"Banzai: copy a card from your opponent's hand","attack":3,"health":3},{"id":"kyabetsu-noka","type":"MINION","name":"Kyabetsu nōka","kanji":"キャベツ農家","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"","attack":5,"health":6},{"id":"ikareru-hyakusho","type":"MINION","name":"Ikareru hyakushō","kanji":"怒れる百姓","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Banzai: deal 4 damage to a minion","attack":5,"health":2},{"id":"togeika","type":"MINION","name":"Tōgeika","kanji":"陶芸家","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Shirodu","attack":2,"health":7},{"id":"maiko","type":"MINION","name":"Maiko","kanji":"舞妓","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Banzai: an enemy minion gets −3 ATK","attack":3,"health":5},{"id":"yumihiki","type":"MINION","name":"Yumihiki","kanji":"弓引き","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Banzai: deal 4 damage","attack":4,"health":3},{"id":"kame","type":"MINION","name":"Kame","kanji":"亀","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Shirodu","attack":1,"health":8},{"id":"tsuru","type":"MINION","name":"Tsuru","kanji":"鶴","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Torii","attack":4,"health":3},{"id":"tanuki","type":"MINION","name":"Tanuki","kanji":"狸","heroClass":"NEUTRAL","ki":2,"rarity":"COMMON","text":"Shinobi","attack":5,"health":3},{"id":"sakana-uri","type":"MINION","name":"Sakana uri","kanji":"魚売り","heroClass":"NEUTRAL","ki":3,"rarity":"COMMON","text":"Banzai: add a Koi to your hand","attack":5,"health":5},{"id":"kunisada-chuji","type":"MINION","name":"Kunisada Chūji","kanji":"国定忠治","heroClass":"NEUTRAL","ki":3,"rarity":"COMMON","text":"Uragiri: when played, roll a die: that much damage to the enemy hero, and that much less Ki on their next turn","attack":3,"health":3},{"id":"sendaiku","type":"MINION","name":"Sendaiku","kanji":"船大工","heroClass":"NEUTRAL","ki":4,"rarity":"COMMON","text":"Seppuku: summon a Sakana uri","attack":4,"health":6},{"id":"taiko-uchi","type":"MINION","name":"Taiko-uchi","kanji":"太鼓打ち","heroClass":"NEUTRAL","ki":4,"rarity":"COMMON","text":"Banzai: other friendly minions +2 ATK","attack":6,"health":6},{"id":"matsunaga-hisahide","type":"MINION","name":"Matsunaga Hisahide","kanji":"松永久秀","heroClass":"NEUTRAL","ki":4,"rarity":"COMMON","text":"Uragiri: when he dies, he explodes: 6 damage to the enemy minion facing him and the two beside it","attack":4,"health":4},{"id":"oishi-kuranosuke","type":"MINION","name":"Ōishi Kuranosuke","kanji":"大石内蔵助","heroClass":"NEUTRAL","ki":4,"rarity":"COMMON","text":"Shinobi. Uragiri: +2/+2 at the end of each of your turns. Your opponent never sees his stats","attack":1,"health":1},{"id":"tora","type":"MINION","name":"Tora","kanji":"虎","heroClass":"NEUTRAL","ki":5,"rarity":"COMMON","text":"Tatakae","attack":10,"health":6},{"id":"akechi-mitsuhide","type":"MINION","name":"Akechi Mitsuhide","kanji":"明智光秀","heroClass":"NEUTRAL","ki":5,"rarity":"COMMON","text":"Uragiri: when played, the enemy's chess clock loses 30 seconds","attack":5,"health":4},{"id":"izanagi","type":"MINION","name":"Izanagi","kanji":"伊邪那岐","heroClass":"NEUTRAL","ki":6,"rarity":"LEGENDARY","text":"Uragiri: when played, look at your opponent's hand and take one card","attack":5,"health":6},{"id":"shike","type":"MINION","name":"Shike","kanji":"師家","heroClass":"NEUTRAL","ki":7,"rarity":"COMMON","text":"Banzai: remove all effects from an enemy minion","attack":10,"health":12},{"id":"raijin","type":"MINION","name":"Raijin","kanji":"雷神","heroClass":"NEUTRAL","ki":7,"rarity":"COMMON","text":"Banzai: deal 12 damage split among enemies","attack":8,"health":8},{"id":"fujin","type":"MINION","name":"Fūjin","kanji":"風神","heroClass":"NEUTRAL","ki":7,"rarity":"COMMON","text":"Banzai: return an enemy minion to its owner's hand","attack":10,"health":10},{"id":"yokozuna","type":"MINION","name":"Yokozuna","kanji":"横綱","heroClass":"NEUTRAL","ki":8,"rarity":"LEGENDARY","text":"Shirodu. Torii","attack":11,"health":16},{"id":"takeda-shingen","type":"MINION","name":"Takeda Shingen","kanji":"武田信玄","heroClass":"NEUTRAL","ki":8,"rarity":"LEGENDARY","text":"Uragiri: when played, your hero power becomes Godai: choose Earth, Water, Fire, Wind or Void","attack":7,"health":8},{"id":"ryu","type":"MINION","name":"Ryū","kanji":"龍","heroClass":"NEUTRAL","ki":9,"rarity":"LEGENDARY","text":"Torii. Passive: +4 to all your damage, healing and armour effects","attack":12,"health":12},{"id":"tenno","type":"MINION","name":"Tennō","kanji":"天皇","heroClass":"NEUTRAL","ki":10,"rarity":"LEGENDARY","text":"Passive: your other minions cost 1 less Ki","attack":15,"health":16},{"id":"amaterasu-omikami","type":"MINION","name":"Amaterasu Ōmikami","kanji":"天照大神","heroClass":"NEUTRAL","ki":10,"rarity":"MYTHIC","text":"Banzai: restore your hero to full HP","attack":17,"health":17},{"id":"yamata-no-orochi","type":"MINION","name":"Yamata no Orochi","kanji":"八岐大蛇","heroClass":"NEUTRAL","ki":10,"rarity":"MYTHIC","text":"Shirodu. Banzai: deal 4 damage to every enemy character. Turn end: heal this minion for 8.","attack":14,"health":18}];
+const CLS = {SAMURAI:['侍','Samurai'], NINJA:['忍','Ninja'], KANNUSHI:['神','Kannushi'], ONI:['鬼','Oni'], NEUTRAL:['和','Neutral']};
+const TRAIN = [];
+CARDS.forEach((c, i) => { if (i === 0 || CARDS[i - 1].heroClass !== c.heroClass) TRAIN.push({cls:c.heroClass}); TRAIN.push({c}); });
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const cap = (s) => s.charAt(0) + s.slice(1).toLowerCase();
+const OATHS = [
+  ['侍','Samurai',[['名誉','Honor','If one of your minions can hit the enemy hero, at least one must.','honor'],['忠義','Allegiance','End every turn with at least 2 minions on your side.','allegiance'],['正義','Justice','A minion that struck your hero must be struck back this turn.','justice']]],
+  ['忍','Ninja',[['沈黙','Silence','Play no more than 2 cards a turn.','silence'],['欺瞞','Deception','End every turn with at least 1 Trap set.','deception'],['規律','Discipline','End every turn with 0 Ki left, if a card could still be played.','discipline']]],
+  ['神主','Kannushi',[['清浄','Purity','Heal every damaged minion you can back to full HP.','purity'],['平和','Peace','Never attack the enemy hero while they still have minions.','peace'],['神性','Divinity','From turn 3, end every turn with a Shrine in play.','divinity']]],
+  ['鬼','Oni',[['破壊','Havoc','Deal at least 3 damage every turn.','havoc'],['降臨','Descension','Play a minion with 5 or more ATK every turn, if you can.','descension'],['堕落','Corruption','Give the enemy at least 1 Curse every turn, if you hold one.','corruption']]]
+];
+const GODAI = [['ku','空 Void','removes every effect from a minion, back to its printed stats'],['fu','風 Wind','+3 ATK and Tatakae: the minion attacks again'],['ka','火 Fire','6 damage'],['sui','水 Water','heal 8, then draw a card'],['chi','地 Earth','+4 HP and Shirodu to an ally, 4 armour to the hero']];
+const BOARDS = [['izakaya','居酒屋','The izakaya','Embers rise from the hearth between two sake cups.','embers'],['town','町','The town','Cherry petals drift over the cobbles.','petals'],['ship','船','The ship','Rain on the deck, waves at the rail.','rain'],['fuji','富士','Mount Fuji','Snow falls over the mountain while you play.','snow']];
+const FRAMES = [['samurai-1-1','Samurai'],['ninja-1-1','Ninja'],['kannushi-1-1','Kannushi'],['oni-1-1','Oni']];
+
+$('#train').innerHTML = TRAIN.map((s) => s.c ? `<div class="seg"><img src="img/c/${esc(s.c.id)}.webp" alt="" loading="lazy"></div>` : `<div class="seg cls"><div>${CLS[s.cls][0]}</div></div>`).join('');
+$('#clans').innerHTML = PATHS.map((p) => `<div class="clan"><header><b>${p.k}</b><div><h3>${p.n}</h3><p>${p.power}</p></div></header><div class="trio">${p.heroes.map(([f, n, k, bio]) => `<figure class="hero" tabindex="0"><img src="img/fig-${f}.webp" alt="${n}"><figcaption><b>${n}<span>${k}</span></b><i>${bio}</i></figcaption></figure>`).join('')}</div></div>`).join('');
+$('#oathGrid').innerHTML = OATHS.map(([ck, c, list]) => `<div class="ocol"><h3><span>${ck}</span>${c}</h3>${list.map(([k, n, d, a], j) => `<div class="oath"><div class="ok" style="--a:${a};animation-delay:${j * .3}s">${k}</div><b>${n}</b><p>${d}</p></div>`).join('')}</div>`).join('');
+$('#gorinto').innerHTML = GODAI.map(([f, n, d]) => `<div><canvas data-e="${f}"></canvas><img src="img/godai-${f}.webp" alt=""><p style="margin:0"><b>${n}</b><span>${d}</span></p></div>`).join('');
+$('#bbg').innerHTML = BOARDS.map(([b]) => `<img src="img/board-${b}.jpg" alt="">`).join('');
+$('#frames').innerHTML = FRAMES.map(([f, c]) => `<figure><img src="img/story-${f}.jpg" alt="${c}" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('');
+$('#boss').innerHTML = [...$('#boss').textContent].map((c, i) => `<span style="transition-delay:${i * .25}s">${c}</span>`).join('');
+const tale = $('#taleText');
+tale.innerHTML = tale.innerHTML.replace(/(<em>.*<\/em>)|([^\s<]+)/g, (m, em) => em ? `<span>${em}</span>` : `<span>${m}</span>`);
+
+/* preloader */
+const KANJI = ['鬼','神','譚','侍','忍','祓','呪','霊','龍','鬼'];
+const imgs = [...document.querySelectorAll('img')].slice(0, 14);
+let loaded = 0, shown = 0, ki = 0;
+imgs.forEach((im) => { if (im.complete) loaded++; else { im.addEventListener('load', () => loaded++); im.addEventListener('error', () => loaded++); } });
+const t0 = performance.now();
+const tick = () => {
+  const target = Math.min(100, Math.round(loaded / imgs.length * 100), Math.round((performance.now() - t0) / 18));
+  shown += Math.max(0, Math.ceil((target - shown) / 6));
+  $('#pn').textContent = shown;
+  const k = KANJI[Math.min(KANJI.length - 1, Math.floor(shown / 11))];
+  if ($('#pk').textContent !== k) $('#pk').textContent = k;
+  if (shown >= 100 || performance.now() - t0 > 9000) { document.body.classList.add('open'); document.body.classList.remove('loading'); return; }
+  requestAnimationFrame(tick);
+};
+requestAnimationFrame(tick);
+
+/* scroll-driven scenes */
+const sections = [...document.querySelectorAll('main > section')];
+const toc = $('#toc'), tocBtn = $('#tocBtn');
+toc.innerHTML = sections.map((s) => `<a href="#${s.id}"><span>${s.dataset.k}</span>${s.dataset.realm}</a>`).join('');
+const tocLinks = [...toc.children];
+const setToc = (open) => { toc.hidden = !open; tocBtn.setAttribute('aria-expanded', String(open)); };
+tocBtn.addEventListener('click', (e) => { e.stopPropagation(); setToc(toc.hidden); });
+toc.addEventListener('click', (e) => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); setToc(false); document.getElementById(a.hash.slice(1)).scrollIntoView({behavior:reduce ? 'auto' : 'smooth'}); });
+document.addEventListener('click', (e) => { if (!toc.hidden && !toc.contains(e.target)) setToc(false); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') setToc(false); });
+const local = (el) => { const r = el.getBoundingClientRect(); return Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight))); };
+let fxMode = 'petals';
+let lastSeg = -1;
+const segs = [...$('#train').children], spath = $('#spath'), sbody = $('#sbody'), snake = $('#snake');
+snake.insertAdjacentHTML('afterbegin', '<defs><pattern id="scales" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#2b1a12"/><path d="M0 22a11 11 0 0 1 22 0M-11 11a11 11 0 0 1 22 0M11 11a11 11 0 0 1 22 0" fill="none" stroke="#d23a2266" stroke-width="2"/></pattern></defs>');
+let SL = 0, segW = 120;
+const buildSnake = () => {
+  const w = innerWidth, h = innerHeight, m = Math.max(60, w * .08), narrow = w < 700;
+  const top = narrow ? 330 : 360, bot = h - (narrow ? 90 : 110), mid = (top + bot) / 2;
+  segW = Math.max(46, Math.min(narrow ? 64 : 96, w * .065, (mid - top) * .62 / 1.4));
+  const r = (bot - top) / 4;
+  const d = `M${w + 200},${top} L${w - m - r},${top} C${w - m + r * .6},${top} ${w - m + r * .6},${mid} ${w - m - r},${mid} L${m + r},${mid} C${m - r * .6},${mid} ${m - r * .6},${bot} ${m + r},${bot} L${-200},${bot}`;
+  spath.setAttribute('d', d); sbody.setAttribute('d', d); SL = spath.getTotalLength();
+  segs.forEach((s) => s.style.setProperty('--w', segW + 'px'));
+};
+buildSnake(); addEventListener('resize', buildSnake);
+const moveSnake = () => {
+  const p = local($('#kami')), gap = segW * 1.05, n = segs.length, span = SL + n * gap;
+  const head = p * span * .98;
+  let best = -1, bestD = 1e9;
+  segs.forEach((s, i) => {
+    const at = head - i * gap;
+    if (at < 0 || at > SL) { s.style.opacity = 0; return; }
+    const pt = spath.getPointAtLength(at), d = Math.abs(at - SL * .5);
+    s.style.opacity = 1;
+    s.style.transform = `translate(${pt.x}px,${pt.y}px) scale(${1 + Math.max(0, .25 - d / SL)})`;
+    if (TRAIN[i].c && d < bestD) { bestD = d; best = i; }
+  });
+  const tail = Math.max(0, head - (n - 1) * gap - gap * .3), hd = Math.min(SL, head + gap * .4);
+  sbody.style.strokeDasharray = `0 ${tail} ${Math.max(0, hd - tail)} ${SL}`;
+  if (hovSeg < 0 && best >= 0 && best !== lastSeg) showCard(best);
+};
+let hovSeg = -1, lastCls = '';
+const showCard = (i) => {
+  lastSeg = i; segs.forEach((s, j) => s.classList.toggle('on', j === i));
+  const c = TRAIN[i].c, k = CLS[c.heroClass];
+  const stats = c.attack != null ? ` · ${c.attack}/${c.health}` : '';
+  $('#hinfo').innerHTML = `<div class="hk">${k[0]}</div><div><h3>${esc(c.name)}<span class="jp">${esc(c.kanji)}</span></h3><p class="stats">${k[1]} ${cap(c.type)} · ${c.ki} Ki${stats} · ${cap(c.rarity)}</p></div><p class="bio" style="margin:0">${esc(c.text) || 'No effect: just the stats.'}</p>`;
+  if (c.heroClass !== lastCls) { lastCls = c.heroClass;
+    [...$('#clsbg').children].forEach((im) => im.classList.toggle('on', im.dataset.c === lastCls));
+    $('#clsname').textContent = lastCls === 'NEUTRAL' ? 'Neutral, for every class' : `${k[1]} only`; }
+};
+segs.forEach((s, i) => { if (!TRAIN[i].c) return;
+  s.addEventListener('mousemove', () => { if (hovSeg === i) return; clearHov(); hovSeg = i; s.classList.add('hov'); showCard(i); });
+  s.addEventListener('mouseleave', clearHov); });
+function clearHov() { if (hovSeg >= 0) segs[hovSeg].classList.remove('hov'); hovSeg = -1; }
+addEventListener('scroll', clearHov, {passive:true});
+const heroes = [...document.querySelectorAll('.hero')], taleSpans = [...tale.children];
+const gorinto = [...$('#gorinto').children], bImgs = [...$('#bbg').children];
+let lastBoard = -2;
+const onScroll = () => {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const g = max > 0 ? scrollY / max : 0;
+  $('#rail').style.width = (g * 100) + '%';
+  const mid = innerHeight * .5;
+  const cur = sections.find((s) => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; }) || sections[0];
+  tocLinks.forEach((a) => a.classList.toggle('cur', a.hash === '#' + cur.id));
+  fxMode = cur.dataset.fx;
+  { const r = tale.getBoundingClientRect(); const f = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .45)));
+    const n = Math.round(f * taleSpans.length); taleSpans.forEach((s, i) => s.classList.toggle('on', i < n)); }
+  moveSnake();
+  { const tall = getComputedStyle($('#paths')).height !== 'auto' && innerWidth > 860;
+    if (tall) { const n = Math.ceil(local($('#paths')) * 1.25 * heroes.length + .5); heroes.forEach((h, i) => h.classList.toggle('in', i < n)); } }
+  { const r = $('#godai').getBoundingClientRect(); const f = (innerHeight * .9 - r.top) / (r.height * .8);
+    gorinto.forEach((d, i) => d.classList.toggle('on', f > i / gorinto.length)); }
+  { const bp = local($('#boards')), I0 = .2, q = Math.min(1, bp / I0);
+    $('#bintro').style.cssText = `transform:translateY(${-q * 60}vh);opacity:${1 - q * 1.4}`;
+    $('#bcur').style.cssText = `transform:translateY(${(1 - q) * 60}vh);opacity:${q * 1.4 - .4}`;
+    $('#bbg').style.setProperty('--bo', Math.min(1, .25 + q));
+    const i = Math.min(BOARDS.length - 1, Math.floor(Math.max(0, bp - I0) / (1 - I0) * BOARDS.length));
+    if (i !== lastBoard) { lastBoard = i; bImgs.forEach((e, j) => e.classList.toggle('on', j === i));
+      $('#bname').innerHTML = `<span class="jp">${BOARDS[i][1]}</span> ${BOARDS[i][2]}`; $('#btext').textContent = BOARDS[i][3]; }
+    if (cur.id === 'boards') fxMode = BOARDS[i][4]; }
+};
+addEventListener('scroll', () => requestAnimationFrame(onScroll), {passive:true});
+addEventListener('resize', onScroll);
+onScroll();
+const io2 = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('on'); io2.unobserve(e.target); } }), {threshold:.25});
+const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && e.target.classList.add('on')), {threshold:.15});
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+io2.observe($('#oathGrid'));
+const io3 = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && innerWidth <= 860) e.target.classList.add('in'); }), {threshold:.3});
+heroes.forEach((h) => io3.observe(h));
+
+/* weather canvas */
+const cv = $('#fx'), cx = cv.getContext('2d');
+let W = 0, H = 0, dpr = 1;
+const size = () => { dpr = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+size(); addEventListener('resize', size);
+const parts = [];
+const spawn = (m, top) => {
+  const p = {m, x:Math.random() * W, y:top ? -20 : Math.random() * H, life:1, r:Math.random()};
+  if (m === 'petals') Object.assign(p, {vx:.4 + p.r * .8, vy:.6 + p.r * .9, s:5 + p.r * 5, a:p.r * 6});
+  if (m === 'snow') Object.assign(p, {vx:Math.random() * .6 - .3, vy:.5 + p.r * 1.2, s:1 + p.r * 2.4});
+  if (m === 'rain') Object.assign(p, {vx:-2.2, vy:13 + p.r * 6, s:14 + p.r * 12});
+  if (m === 'ink') Object.assign(p, {vx:Math.random() * .3 - .15, vy:-.1 - p.r * .25, s:1 + p.r * 1.6});
+  if (m === 'embers' || m === 'red') Object.assign(p, {y:top ? H + 10 : p.y, vx:Math.random() * .8 - .4, vy:-(.6 + p.r * 1.6), s:1 + p.r * 2.2});
+  parts.push(p);
+};
+const COUNT = {petals:46, snow:110, rain:150, ink:60, embers:70, red:90};
+const draw = () => {
+  cx.clearRect(0, 0, W, H);
+  const want = Math.round(COUNT[fxMode] * Math.min(1, W / 1100 + .3));
+  const mine = parts.filter((p) => p.m === fxMode).length;
+  for (let i = 0; i < Math.min(4, want - mine); i++) spawn(fxMode, true);
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i];
+    if (p.m !== fxMode) p.life -= .02;
+    p.x += p.vx + (p.m === 'petals' ? Math.sin(p.y / 40 + p.a) * .6 : 0); p.y += p.vy;
+    if (p.m === 'embers' || p.m === 'red') p.x += Math.sin(p.y / 30 + p.r * 9) * .4;
+    const out = p.y > H + 30 || p.y < -40 || p.x > W + 40 || p.x < -40;
+    if (p.life <= 0 || out) { parts.splice(i, 1); continue; }
+    cx.globalAlpha = Math.max(0, p.life);
+    if (p.m === 'petals') { cx.save(); cx.translate(p.x, p.y); cx.rotate(p.y / 50 + p.a); cx.fillStyle = '#f2b8c6'; cx.beginPath(); cx.ellipse(0, 0, p.s, p.s * .55, 0, 0, 7); cx.fill(); cx.restore(); }
+    else if (p.m === 'rain') { cx.strokeStyle = '#9fb4cc66'; cx.lineWidth = 1; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x + p.vx * 1.5, p.y - p.s); cx.stroke(); }
+    else { cx.fillStyle = p.m === 'snow' ? '#f4f1ea' : p.m === 'ink' ? '#efe4cf55' : p.m === 'red' ? '#ff4a26' : '#ffa04a';
+      if (p.m === 'embers' || p.m === 'red') { cx.shadowColor = cx.fillStyle; cx.shadowBlur = 8; }
+      cx.beginPath(); cx.arc(p.x, p.y, p.s, 0, 7); cx.fill(); cx.shadowBlur = 0; }
+  }
+  cx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+};
+if (!reduce) requestAnimationFrame(draw);
+
+/* godai: each stone with its own element drawn behind it */
+const gcv = [...document.querySelectorAll('.gorinto canvas')].map((c) => ({c, x:c.getContext('2d'), e:c.dataset.e, p:[]}));
+let godaiOn = false, gt = 0;
+new IntersectionObserver((es) => { godaiOn = es[0].isIntersecting; }).observe($('#godai'));
+const gsize = () => gcv.forEach((g) => { const r = g.c.getBoundingClientRect(); g.w = r.width; g.h = r.height; g.c.width = r.width * dpr; g.c.height = r.height * dpr; g.x.setTransform(dpr, 0, 0, dpr, 0, 0); });
+gsize(); addEventListener('resize', gsize);
+const R = Math.random;
+const gdraw = () => {
+  requestAnimationFrame(gdraw);
+  if (!godaiOn) return;
+  gt += 1 / 60;
+  gcv.forEach((g) => {
+    const {x, w, h, e} = g; x.clearRect(0, 0, w, h);
+    if (e === 'ku') {   /* void: a slow starfield turning around a dark well */
+      if (!g.p.length) for (let i = 0; i < 90; i++) g.p.push({a:R() * 7, r:10 + R() * w * .55, s:R() * 1.4 + .3, t:R() * 7});
+      const gr = x.createRadialGradient(w * .2, h / 2, 0, w * .2, h / 2, w * .6); gr.addColorStop(0, '#3b2a6b55'); gr.addColorStop(1, '#0000'); x.fillStyle = gr; x.fillRect(0, 0, w, h);
+      g.p.forEach((s) => { s.a += .0015 * (200 / s.r); x.globalAlpha = .4 + .6 * Math.abs(Math.sin(gt * 1.5 + s.t)); x.fillStyle = '#e8e2ff'; x.beginPath(); x.arc(w * .2 + Math.cos(s.a) * s.r, h / 2 + Math.sin(s.a) * s.r * .35, s.s, 0, 7); x.fill(); });
+      x.globalAlpha = 1;
+    } else if (e === 'fu') {   /* wind: pale gusts sweeping across */
+      if (g.p.length < 14) g.p.push({x:-80, y:R() * h, v:3 + R() * 4, l:40 + R() * 90, a:R() * 7});
+      x.strokeStyle = '#e9efe4aa'; x.lineCap = 'round';
+      g.p = g.p.filter((s) => { s.x += s.v; x.lineWidth = 1.5; x.beginPath(); for (let k = 0; k <= 10; k++) { const px = s.x - s.l + k * s.l / 10, py = s.y + Math.sin(px / 25 + s.a + gt * 3) * 4; k ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke(); return s.x - s.l < w; });
+    } else if (e === 'ka') {   /* fire: flames licking up from the bottom */
+      for (let i = 0; i < 4; i++) g.p.push({x:R() * w, y:h + 4, v:.8 + R() * 1.6, s:4 + R() * 9, l:1});
+      x.globalCompositeOperation = 'lighter';
+      g.p = g.p.filter((s) => { s.y -= s.v; s.x += Math.sin(gt * 5 + s.y / 9) * .5; s.l -= .016; s.s *= .985;
+        const c = x.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.s); c.addColorStop(0, `rgba(255,210,120,${s.l})`); c.addColorStop(.5, `rgba(240,90,30,${s.l * .6})`); c.addColorStop(1, 'rgba(120,20,0,0)');
+        x.fillStyle = c; x.beginPath(); x.arc(s.x, s.y, s.s, 0, 7); x.fill(); return s.l > 0; });
+      x.globalCompositeOperation = 'source-over';
+    } else if (e === 'sui') {   /* water: three layers of ocean swell, with foam */
+      [['#1d4a7a99', .55, 1, 14], ['#2b6aa0aa', .68, 1.6, 10], ['#cfe6f5cc', .8, 2.3, 6]].forEach(([col, base, sp, amp], j) => {
+        x.fillStyle = col; x.beginPath(); x.moveTo(0, h);
+        for (let px = 0; px <= w; px += 6) x.lineTo(px, h * base + Math.sin(px / (38 + j * 9) + gt * sp) * amp * .5 + Math.sin(px / 17 - gt * sp * .7) * amp * .2);
+        x.lineTo(w, h); x.fill(); });
+    } else if (e === 'chi') {   /* earth: dust and pebbles falling on a rocky floor */
+      if (R() < .25) g.p.push({x:R() * w, y:-6, v:0, s:1.5 + R() * 3.5, r:R() * 7});
+      x.fillStyle = '#5a4330'; x.beginPath(); x.moveTo(0, h);
+      for (let px = 0; px <= w; px += 22) x.lineTo(px, h - 10 - ((px * 7919) % 13)); x.lineTo(w, h); x.fill();
+      g.p = g.p.filter((s) => { s.v += .12; s.y += s.v; x.fillStyle = '#b58c5e'; x.save(); x.translate(s.x, s.y); x.rotate(s.r + s.y / 20); x.fillRect(-s.s / 2, -s.s / 2, s.s, s.s * .8); x.restore(); return s.y < h - 12; });
+      x.fillStyle = '#c9a77a22'; x.fillRect(0, h - 14 + Math.sin(gt * 2) * 1.5, w, 14);
+    }
+  });
+};
+if (!reduce) requestAnimationFrame(gdraw);
+
+/* in game: clips and screenshots */
+{
+  const CLIPS = [['play','手','Your hand opens'],['drag','置','A minion to its slot'],['banner','読','Reading a card'],['enemy','敵','The AI plays'],['tengu','天','Tengu lands']];
+  const SHOTS = [['home','The home screen'],['class-select','Choosing a class'],['adventure-map','The Adventure map'],['story','The story between battles'],['mulligan','The mulligan'],['board-start','The first turn'],['play-card','A card played'],['midgame','Mid-game, turn 7']];
+  const v = $('#clip'), box = $('#clips');
+  box.innerHTML = CLIPS.map(([f, k, n], i) => `<button role="tab" aria-selected="${i === 0}" data-f="${f}"><span>${k}</span>${n}</button>`).join('');
+  box.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return;
+    box.querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    v.src = `media/${b.dataset.f}.mp4`; v.play().catch(() => {}); });
+  new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting ? v.play().catch(() => {}) : v.pause())).observe(v);
+  $('#shots').innerHTML = SHOTS.map(([f, c]) => `<figure tabindex="0" data-f="${f}" data-c="${c}"><img src="img/shots/${f}.jpg" alt="${c}" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('');
+  const lb = $('#lightbox');
+  const open = (fig) => { $('#lbimg').src = `img/shots/${fig.dataset.f}.jpg`; $('#lbcap').textContent = fig.dataset.c; lb.hidden = false; $('#lbclose').focus(); };
+  $('#shots').addEventListener('click', (e) => { const f = e.target.closest('figure'); if (f) open(f); });
+  $('#shots').addEventListener('keydown', (e) => { const f = e.target.closest('figure'); if (f && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(f); } });
+  const close = () => { lb.hidden = true; };
+  $('#lbclose').addEventListener('click', close); lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+}
+
+/* sound: the game's own music, changing with the scene, cross-faded */
+const MUSIC = {edo:['music'], tale:['music'], paths:['music'], kami:['music'], oaths:['battle-music'], godai:['battle-music'], ingame:['battle-music'],
+  boards:['adventure-music'], shura:['adventure-music'], yomi:['battle-music','orochi-storm'], build:['battle-music'], end:['battle-music','orochi-storm']};
+
+const VOL = {'orochi-storm':.55};
+const tracks = {};
+let soundOn = false;
+const wanted = () => {
+  const mid = innerHeight * .5;
+  const s = sections.find((x) => { const r = x.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; }) || sections[0];
+  return MUSIC[s.id] || ['music'];
+};
+const track = (n) => tracks[n] || (tracks[n] = Object.assign(new Audio(`audio/${n}.mp3`), {loop:true, preload:'auto', volume:0}));
+setInterval(() => {
+  const want = soundOn ? wanted() : [];
+  want.forEach((n) => { const a = track(n); if (a.paused) a.play().catch(() => {}); });
+  Object.entries(tracks).forEach(([n, a]) => {
+    const target = want.includes(n) ? (VOL[n] || .6) : 0;
+    a.volume = Math.max(0, Math.min(1, a.volume + Math.sign(target - a.volume) * Math.min(.04, Math.abs(target - a.volume))));
+    if (a.volume === 0 && target === 0 && !a.paused) a.pause();
+  });
+}, 60);
+$('#snd').addEventListener('click', () => {
+  soundOn = !soundOn;
+  if (soundOn) wanted().forEach((n) => track(n).play().catch(() => { $('#snd').textContent = 'No sound here'; }));
+  $('#snd').setAttribute('aria-pressed', String(soundOn));
+  $('#snd').textContent = soundOn ? 'Sound on' : 'Sound off';
+});
+
+$('#copy')?.addEventListener('click', () => {
+  navigator.clipboard.writeText('mvn javafx:run').then(() => { $('#copy').textContent = 'Copied'; }, () => { $('#copy').textContent = 'Select it'; });
+});
+}
+</script>
+</body>
+</html>
