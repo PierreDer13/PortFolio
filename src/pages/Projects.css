@@ -262,3 +262,12 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* Artwork d'un projet (ex. Oni Shin Tan) : remplit toute la zone visuel */
+.project-artwork {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* recadre sans déformer */
+  object-position: center 40%; /* garde le titre et le torii visibles */
+  display: block;
+}

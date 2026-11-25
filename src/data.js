@@ -106,7 +106,8 @@ export const projects = [
         cta: 'Discover the game',
     repo: 'https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip',
     repoCta: 'Download for Windows (.zip)',
-    preview: 'soon',
+    preview: 'image',
+    image : './oni-shin-tan/img/home.jpg',
   },
   {
     id: 'portfolio',

@@ -10,7 +10,7 @@ import SiteMock from './SiteMock'
 export default function ProjectCard({ project }) {
   // "Destructuring" : on sort chaque champ de l'objet dans sa propre variable
   // (évite d'écrire project.title, project.tags, etc. partout)
-  const { status, badge, brand, title, tagline, description, tags, context, swatches, href, cta, preview, repo, repoCta } = project
+  const { status, badge, brand, title, tagline, description, tags, context, swatches, href, cta, preview, repo, repoCta, image } = project
   const isLive = status === 'live'
   
   return (
@@ -22,7 +22,10 @@ export default function ProjectCard({ project }) {
         {/* Badge jaune (en ligne) ou gris foncé (en cours) */}
         <span className={`project-badge ${isLive ? 'is-live' : 'is-wip'}`}>{badge}</span>
         {/* Choix du visuel selon le champ `preview` de data.js */}
-        {preview === 'mug' ? <Mug3D /> : preview === 'site' ? <SiteMock /> : <ComingSoon />}
+        {preview === 'mug' ? <Mug3D />
+          : preview === 'site' ? <SiteMock />
+          : preview === 'image' ? <img className="project-artwork" src={image} alt={`${title} artwork`} loading="lazy" />
+          : <ComingSoon />}
       </div>
 
       {/* ---- Texte ---- */}
