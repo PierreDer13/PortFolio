@@ -271,3 +271,23 @@
   object-position: center 40%; /* garde le titre et le torii visibles */
   display: block;
 }
+/* Ligne de boutons de téléchargement (un par OS) */
+.project-downloads {
+  display: flex;
+  flex-wrap: wrap;          /* passe à la ligne sur petit écran */
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.project-downloads-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #616161;
+  margin-right: 4px;
+}
+.project-cta.is-small {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin: 0;                /* annule l'éventuelle marge des grands boutons */
+}

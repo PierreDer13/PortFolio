@@ -364,14 +364,17 @@ footer{padding:30px 18px 60px;text-align:center;font-size:13px;color:var(--soft)
   <div class="bg"><img src="img/story-orochi-8.jpg" alt=""></div>
   <div class="wrap reveal">
     <h2>You reached Yomi. Orochi is waiting.</h2>
-    <p class="soft" style="margin:0 auto">Download the game for Windows: nothing else to install.</p>
-    <a class="btn dl" href="https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip">Download for Windows (.zip)</a>
+    <p class="soft" style="margin:0 auto">Pick your system: Java is bundled, nothing else to install.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <a class="btn dl" href="https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip">Windows (.zip)</a>
+      <a class="btn dl" href="https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-macos.zip">macOS (.zip)</a>
+      <a class="btn dl" href="https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-linux.zip">Linux (.zip)</a>
+    </div>
     <ol class="steps">
       <li>Unzip the folder.</li>
-      <li>Open the <b>OniShinTan</b> folder.</li>
-      <li>Double-click <b>OniShinTan.exe</b>.</li>
+      <li><b>Windows</b>: run <b>OniShinTan\OniShinTan.exe</b> · <b>macOS</b>: open <b>OniShinTan.app</b> · <b>Linux</b>: run <b>OniShinTan/bin/OniShinTan</b></li>
     </ol>
-    <p class="soft small">Java is bundled inside the zip. If Windows SmartScreen warns you, click <i>More info</i> then <i>Run anyway</i>.</p>
+    <p class="soft small">Windows SmartScreen: <i>More info</i> → <i>Run anyway</i>. macOS: right-click the app → <i>Open</i> (or run <code>xattr -cr OniShinTan.app</code>) the first time.</p>
     <div class="team">
       <div><b>Pierre</b><span>model, engine, data, AI</span></div>
       <div><b>Kayne</b><span>interface, art, sound</span></div>

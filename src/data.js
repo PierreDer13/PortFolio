@@ -104,8 +104,14 @@ export const projects = [
     swatches: ['#0c0a09', '#efe4cf', '#d23a22', '#22344f', '#b9ab93'],
     href: './oni-shin-tan/',
         cta: 'Discover the game',
-    repo: 'https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip',
-    repoCta: 'Download for Windows (.zip)',
+    repo: 'https://github.com/PierreDer13/oni-shin-tan',
+    repoCta: 'View the code on GitHub',
+    // Boutons de téléchargement (1 objet = 1 bouton) ; absent = pas de boutons
+    downloads: [
+      { label: 'Windows', href: 'https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-windows.zip' },
+      { label: 'macOS', href: 'https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-macos.zip' },
+      { label: 'Linux', href: 'https://github.com/PierreDer13/PortFolio/releases/latest/download/OniShinTan-linux.zip' },
+    ],
     preview: 'image',
     image : './oni-shin-tan/img/home.jpg',
   },
