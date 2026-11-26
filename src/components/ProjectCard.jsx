@@ -81,7 +81,6 @@ export default function ProjectCard({ project }) {
         {/* Boutons de téléchargement par OS : seulement si `downloads` existe dans data.js */}
         {downloads && (
           <div className="project-downloads">
-            <span className="project-downloads-label">Download</span>
             {downloads.map((d) => (
               <a key={d.label} className="project-cta is-secondary is-small" href={d.href}>
                 ⬇ {d.label}
